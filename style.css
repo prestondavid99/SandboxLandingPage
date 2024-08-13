@@ -49,8 +49,8 @@ button:hover {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 100vh;
-  width: 100%;
+  min-height: 100vh;
+  max-width: 100%;
 }
 
 .left-side {
@@ -83,6 +83,10 @@ button:hover {
   width: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow with offset, blur, and color */
   transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.form {
+  text-align: left;
 }
 
 .perks {
