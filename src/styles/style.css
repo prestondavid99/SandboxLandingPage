@@ -8,7 +8,8 @@
     --background-color-1: #ffffff;  /* Background color */
     --background-color-2: #D9D9D9;
     --text-color: #000000;  /* Default text color */
-  
+    --button-gradient-color: #6960D2;
+
     /* Defining our brand fonts */
     --font-primary: 'Raleway', sans-serif; /* Store the font family as a variable */
     --font-weight-regular: 400;
@@ -37,16 +38,20 @@
     --spacing-x24: 96px;
     --spacing-x26: 104px;
 
-    --side-padding: var(--spacing-x26);
-
     /* Styling Variables */
     --navbar-height: var(--spacing-x20);
+    --side-padding: var(--spacing-x26);
 }
 
-/* Styling Components (alphabetical order)*/
-.button-contained {
-    background-color: var(--primary-color);
+/* Styling Components (alphabetical order) */
+.button {
+    font-size: var(--paragraph-font-size);
+    font-family: var(--font-primary), sans-serif; /* Use the primary font for paragraphs */
+    font-weight: var(--font-weight-regular);
     text-transform: none;
+}
+.button-contained {
+    background-image: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
 }
 
 .button-contained:hover {
@@ -55,7 +60,6 @@
 
 .button-text {
     color: var(--primary-color);
-    text-transform: none;
 }
 
 .navbar {
@@ -95,6 +99,18 @@
 .navbar ul li a {
     text-decoration: none;
     color: var(--primary-color);
+}
+
+.navbar #logo {
+    font-size: var(--h2-font-size);
+    font-family: var(--font-primary), sans-serif; /* Use the primary font for paragraphs */
+    font-weight: 900;
+    text-transform: none;
+    text-decoration: none;
+
+    background-image: linear-gradient(to right, var(--primary-color), var(--accent-color-3));
+    color: transparent;
+    background-clip: text;
 }
 
 
