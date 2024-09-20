@@ -10,6 +10,10 @@ import '../styles/style.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
+        <>
+        <Head>
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
         <div>
             <Navbar />
             <main>
@@ -17,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </main>
             <Footer />
         </div>
+        </>
     );
 }
 
