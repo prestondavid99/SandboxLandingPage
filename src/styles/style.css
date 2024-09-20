@@ -8,7 +8,7 @@
     --background-color-1: #ffffff;  /* Background color */
     --background-color-2: #D9D9D9;
     --text-color: #000000;  /* Default text color */
-
+  
     /* Defining our brand fonts */
     --font-primary: 'Raleway', sans-serif; /* Store the font family as a variable */
     --font-weight-regular: 400;
@@ -19,6 +19,89 @@
     --h1-font-size: 2.5rem;
     --h2-font-size: 2rem;
     --paragraph-font-size: 1rem;
+
+    /* Establishing Spacing Convention */
+    --spacing-x1: 4px;
+    --spacing-x2: 8px;
+    --spacing-x3: 12px;
+    --spacing-x4: 16px;
+    --spacing-x6: 24px;
+    --spacing-x8: 32px;
+    --spacing-x10: 40px;
+    --spacing-x12: 48px;
+    --spacing-x14: 56px;
+    --spacing-x16: 64px;
+    --spacing-x18: 72px;
+    --spacing-x20: 80px;
+    --spacing-x22: 88px;
+    --spacing-x24: 96px;
+    --spacing-x26: 104px;
+
+    --side-padding: var(--spacing-x26);
+
+    /* Styling Variables */
+    --navbar-height: var(--spacing-x20);
+}
+
+/* Styling Components (alphabetical order)*/
+.button-contained {
+    background-color: var(--primary-color);
+    text-transform: none;
+}
+
+.button-contained:hover {
+    filter: brightness(85%);
+}
+
+.button-text {
+    color: var(--primary-color);
+    text-transform: none;
+}
+
+.navbar {
+    background-color: var(--background-color-1);
+    width: 100%;
+    height: var(--navbar-height);
+    padding: 0 var(--side-padding);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    box-sizing: border-box; /* Ensures padding is included in the total width */
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);  /* Offset-x, Offset-y, Blur-radius, and Color */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically center elements */
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: flex-end; /* Distribute space between left and right */
+    align-items: center; /* Vertically center elements */
+    list-style-type: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    margin-left: var(--spacing-x6); /* Add spacing between the menu items on the right */
+}
+
+.navbar ul li:first-child {
+    margin-left: 0; /* No margin for the logo */
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+
+/* Styling HTML Elements */
+main {
+    margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
+    padding: 0 var(--side-padding); /* Add padding to the left and right so that the content always fits on the page */
 }
 
 footer {
