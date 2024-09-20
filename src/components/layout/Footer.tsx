@@ -1,7 +1,10 @@
 const Footer: React.FC = () => {
     return (
         <footer>
-            <p>&copy; {new Date().getFullYear()} My Website</p>
+            <div className="footer-container">
+
+            </div>
+            <p>&copy; {new Date().getFullYear()} Caster</p>
         </footer>
     );
 };
