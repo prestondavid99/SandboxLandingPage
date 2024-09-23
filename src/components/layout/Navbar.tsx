@@ -7,8 +7,8 @@ const Navbar: React.FC = () => {
             <Link id="logo" href="/">caster</Link>
             <ul>
                 <li>
-                    <Link href="/login">
-                        <Button className='button button-text' variant="text">Log in</Button>
+                    <Link href="/comingsoon">
+                        Log In
                     </Link>
                 </li>
                 <li>
