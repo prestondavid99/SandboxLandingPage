@@ -23,7 +23,6 @@ const Footer: React.FC = () => {
                         <p>Company</p>
                         <Link href={"/comingsoon"}>About</Link>
                         <Link href={"/comingsoon"}>Contact</Link>
-
                     </div>
 
                     <div className="footer-column">

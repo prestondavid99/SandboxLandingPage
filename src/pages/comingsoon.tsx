@@ -9,7 +9,7 @@ export default function ComingSoon() {
             </Head>
             <div>
                 <h1>Coming Soon &#128517;</h1>
-                <p>We're working on building this feature &#128073;&#128072;. Check back soon!</p>
+                <p>We're working on building this page &#128073;&#128072;. Check back soon!</p>
             </div>
         </>
     );

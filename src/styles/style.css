@@ -7,6 +7,7 @@ These styles apply to the entire site. Consider them the default styles.
 Be very careful when changing any of these styles.
 */
 
+/* ##### DESKTOP/DEFAULT STYLES ##### */
 :root {
     /* Defining our brand colors */
     --primary-color: #8760D2;  /* Your primary brand color */
@@ -49,11 +50,16 @@ Be very careful when changing any of these styles.
 
     /* Styling Variables */
     --navbar-height: var(--spacing-x20);
-    --side-padding: var(--spacing-x26);
+    --side-padding: 8%;
+
+    /* Defining screen sizes for responsiveness */
+    --mobile-screen-width: 600px;
+    --tablet-screen-width: 900px;
 }
 
 html {
     font-size: 16px; /* Default */
+    min-width: 100vw;
 }
 
 body {
@@ -62,6 +68,7 @@ body {
     background-color: var(--background-color-1); /* Set background color */
     font-weight: var(--font-weight-regular); /* Set default font weight */
     line-height: 1.6; /* Optional: improves readability by increasing line spacing */
+    min-width: 100vw;
 }
 
 .vsc-initialized {
@@ -108,6 +115,7 @@ p {
 }
 
 a {
+    font-size: var(--paragraph-font-size);
     text-decoration: none;
     color: var(--primary-color);
 }
@@ -116,6 +124,18 @@ a:hover {
     filter: brightness(85%);
 }
 
+/* ##### MOBILE STYLES (General Styles only) ##### 
+Each section will have its own mobile sub-section 
+Mobile styles must appear AFTER the default/desktop style for it to work
+*/
+
+@media (max-width: 600px) {
+    :root {
+        --h1-font-size: 2rem;
+        --h2-font-size: 1.5rem;
+        --paragraph-font-size: 0.8rem;
+    }
+}
 
 /*
 ####################################
@@ -140,7 +160,7 @@ For example, adding a text accent with the text-accent class.
 
 .text-accent {
     color: var(--primary-color);
-    text-shadow: var(--spacing-x1) var(--spacing-x1) var(--spacing-x2) var(--text-color);
+    text-shadow: 2px 2px 4px var(--text-color);
 }
 
 .button {
@@ -246,6 +266,7 @@ footer {
 
 .footer-right {
     height: 100%;
+    width: 22rem;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -258,7 +279,7 @@ footer {
     align-items: flex-start;
     justify-content: flex-start;
     min-width: auto;
-    width: 7.5rem;
+    width: 30%;
     height: 100%;
 }
 
@@ -271,6 +292,30 @@ footer {
     margin: 0.5rem 0;
     line-height: 1.5rem;
     text-align: left;
+}
+
+@media (max-width: 600px) {
+    footer {
+        height: 100%;
+    }
+
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .footer-right {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .footer-column {
+        width: 100%;
+    }
 }
 
 /*
@@ -292,15 +337,14 @@ Use section labels as needed for readability.
     align-items: center;
     justify-content: center;
     width: 100%;
-    /* margin: var(--spacing-x16) 0; */
 }
 
 .home-title {
-    width: 40rem;
+    width: 60%;
 }
 
 .home-title h1 {
-    font-size: 5rem;
+    font-weight: var(--font-weight-bold);
     line-height: 1.1;
 }
 
