@@ -135,6 +135,26 @@ a {
     color: var(--primary-color);
 }
 
+input[type="email"] {
+    border: none;
+    outline: none;
+    background-color: white;
+    font-family: var(--font-primary), sans-serif;
+}
+
+form {
+    display: flex;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: white;
+    /*color: white;*/
+    /*border: none;*/
+    border-radius: 1rem;
+    /*cursor: pointer;*/
+    /*transition: background-color 0.3s ease;*/
+    /*box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);*/
+}
+
 a:hover {
     filter: brightness(85%);
 }
@@ -377,8 +397,11 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    margin-top: 2rem;
+    justify-content: center;
+    background: var(--secondary-color);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-top: var(--spacing-x12);
 }
 
 .home-links a {
