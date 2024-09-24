@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
-import '../styles/style.css';
 
 export default function Home() {
     return (
@@ -23,12 +22,15 @@ export default function Home() {
                     </p>
                 </div>
                 <div className='home-links'>
+                    <form className="submit-email" action="/submit-email" method="POST">
+                        <input type="email" id="email" name="email" required placeholder="Enter your email"/>
+                    </form>
                     <Link href="/signup">
                         <Button className='button button-contained' variant="contained">Join Waitlist</Button>
                     </Link>
-                    <Link href="/comingsoon">Watch Demo</Link>
+                    {/*<Link href="/comingsoon">Watch Demo</Link>*/}
                 </div>
-                
+
             </div>
         </>
     );
