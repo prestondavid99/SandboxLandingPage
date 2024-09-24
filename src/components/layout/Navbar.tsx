@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 const Navbar: React.FC = () => {
     return (
         <nav className="navbar">
-            <Link id="logo" href="/">caster</Link>
+            <Link className="logo-text" href="/">caster</Link>
             <ul>
                 <li>
                     <Link href="/comingsoon">

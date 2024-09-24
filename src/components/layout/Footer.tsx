@@ -6,32 +6,30 @@ const Footer: React.FC = () => {
             <div className="footer-container">
                 {/*Left Section: Logo and Copyright*/}
                 <div className="footer-left">
-                    <div className="logo">
-                        <p>caster</p>
-                    </div>
+                    <Link className="logo-text" href="/">caster</Link>
                     <p>&copy; 2024 Caster. All rights reserved.</p>
                 </div>
 
                 {/*Right Section: Navigation Links*/}
                 <div className="footer-right">
                     <div className="footer-column">
-                        <h4>Product</h4>
-                        <Link href={""}>Pricing</Link>
-                        <Link href={""}>Demo</Link>
-                        <Link href={""}>Log In</Link>
+                        <p>Product</p>
+                        <Link href={"/comingsoon"}>Pricing</Link>
+                        <Link href={"/comingsoon"}>Demo</Link>
+                        <Link href={"/comingsoon"}>Log In</Link>
                     </div>
 
                     <div className="footer-column">
-                        <h4>Company</h4>
-                        <Link href={""}>About</Link>
-                        <Link href={""}>Contact</Link>
+                        <p>Company</p>
+                        <Link href={"/comingsoon"}>About</Link>
+                        <Link href={"/comingsoon"}>Contact</Link>
 
                     </div>
 
                     <div className="footer-column">
-                        <h4>Legal</h4>
-                        <Link href={"TODO"}>Privacy Policy</Link>
-                        <Link href={""}>Terms and Conditions</Link>
+                        <p>Legal</p>
+                        <Link href={"/comingsoon"}>Privacy Policy</Link>
+                        <Link href={"/comingsoon"}>Terms and Conditions</Link>
                     </div>
                 </div>
             </div>

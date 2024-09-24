@@ -14,13 +14,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Head>
                 <meta name="viewport" content="initial-scale=1, width=device-width" />
             </Head>
-            <div>
-                <Navbar />
-                <main>
-                    <Component {...pageProps} />
-                </main>
-                <Footer />
-            </div>
+            <Navbar />
+            <main>
+                <Component {...pageProps} />
+            </main>
+            <Footer />
         </>
     );
 }
