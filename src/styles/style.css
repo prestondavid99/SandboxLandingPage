@@ -19,6 +19,7 @@ Be very careful when changing any of these styles.
     --background-color-2: #D9D9D9;
     --text-color: #000000;  /* Default text color */
     --button-gradient-color: #6960D2;
+    --shadow-color: 0, 0, 0; /* black in rgb. Important that this stays rgb */
 
     /* Defining our brand fonts */
     --font-primary: 'Raleway', sans-serif; /* Store the font family as a variable */
@@ -55,6 +56,20 @@ Be very careful when changing any of these styles.
     /* Defining screen sizes for responsiveness */
     --mobile-screen-width: 600px;
     --tablet-screen-width: 900px;
+}
+
+.dark-mode {
+    /* Dark mode variables */
+    --primary-color: #C3B9F7;
+    --secondary-color: #8D80DA;
+    --accent-color-1: #F9C88D;
+    --accent-color-2: #F4A799;
+    --accent-color-3: #F2D7EF;
+    --background-color-1: #121212;
+    --background-color-2: #333333;
+    --text-color: #ffffff;
+    --button-gradient-color: #4F46E5;
+    --shadow-color: 255, 255, 255; /* rbg for white. important that this stays in rgb not hex */
 }
 
 html {
@@ -160,7 +175,7 @@ For example, adding a text accent with the text-accent class.
 
 .text-accent {
     color: var(--primary-color);
-    text-shadow: 2px 2px 4px var(--text-color);
+    text-shadow: 2px 2px 4px rgb(var(--shadow-color));
 }
 
 .button {
@@ -203,7 +218,7 @@ For example: styles for the navbar and footer.
     left: 0;
     right:0;
     box-sizing: border-box; /* Ensures padding is included in the total width */
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);  /* Offset-x, Offset-y, Blur-radius, and Color */
+    box-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);  /* Offset-x, Offset-y, Blur-radius, and Color */
     display: flex;
     justify-content: space-between;
     align-items: center; /* Vertically center elements */
@@ -288,10 +303,21 @@ footer {
 }
 
 .footer-column a {
-    color: black;
+    color: var(--text-color);
     margin: 0.5rem 0;
     line-height: 1.5rem;
     text-align: left;
+}
+
+.footer-column span {
+    color: var(--text-color);
+    margin: 0.5rem 0;
+    line-height: 1.5rem;
+    text-align: left;
+}
+
+.footer-column span:hover {
+    cursor: pointer;
 }
 
 @media (max-width: 600px) {
@@ -351,11 +377,14 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: var(--spacing-x12);
+    justify-content: space-evenly;
+    margin-top: 2rem;
 }
 
 .home-links a {
     font-weight: bold;
-    margin-left: var(--spacing-x10);
+}
+
+.home-links a .button {
+    margin-right: 4rem;
 }
