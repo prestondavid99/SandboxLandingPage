@@ -397,17 +397,14 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     background: var(--secondary-color);
     padding: 1.5rem;
     border-radius: 1rem;
     margin-top: var(--spacing-x12);
+    width: 55%;
 }
 
 .home-links a {
     font-weight: bold;
-}
-
-.home-links a .button {
-    margin-right: 4rem;
 }
