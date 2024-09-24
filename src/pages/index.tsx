@@ -13,11 +13,14 @@ export default function Home() {
             <div className='home-title-section'>
                 <div className='home-title'>
                     <h1>
-                        AI-Powered 
-                        <div className='text-accent'>Proforma</div> 
-                        for eCommerce
+                        AI-Powered <br></br>
+                        <span className='text-accent'>Proforma</span> for <br></br>
+                        eCommerce
                     </h1>
-                    <p>Spend less time in Excel and more time growing your business</p>
+                    <p>
+                        Spend less time in Excel and more time <br></br>
+                        growing your business
+                    </p>
                 </div>
                 <div className='home-links'>
                     <Link href="/signup">
