@@ -7,8 +7,10 @@ export default function SignUp() {
                 <title>Sign up for Caster!</title>
                 <meta name="description" content="Create a free account on Caster to get started with forecasting" />
             </Head>
-            <div>
-                <h1>Sign Up</h1>
+            <div className="container">
+                <div className="white-container">
+                    <h2>Sign Up</h2>
+                </div>
             </div>
         </>
     );

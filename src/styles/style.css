@@ -223,6 +223,29 @@ For example, adding a text accent with the text-accent class.
     color: var(--primary-color);
 }
 
+.container {
+    width: 100%;
+    display: flex;
+    padding-top: var(--side-padding);
+    padding-bottom: var(--side-padding);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.white-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    justify-content: start;
+    align-items: center;
+    border-radius: 2rem;
+    padding-bottom: 8rem;
+    background: white;
+    box-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);
+}
+
 /*
 ####################################
 ########## LAYOUT STYLES ###########
@@ -285,6 +308,7 @@ footer {
     width: 100%;
     height: 15rem;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     left: 0;
     right:0;
 }
@@ -294,6 +318,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+
     padding: 1.5rem 0;
     box-sizing: border-box;
 }
