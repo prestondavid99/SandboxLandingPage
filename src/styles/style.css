@@ -75,7 +75,9 @@ Be very careful when changing any of these styles.
 
 html {
     font-size: 16px; /* Default */
-    min-width: 100vw;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -83,8 +85,11 @@ body {
     color: var(--text-color); /* Apply default text color */
     background-color: var(--background-color-1); /* Set background color */
     font-weight: var(--font-weight-regular); /* Set default font weight */
+    margin: 0;
+    padding: 0;
     line-height: 1.6; /* Optional: improves readability by increasing line spacing */
-    min-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .vsc-initialized {
@@ -108,7 +113,7 @@ main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
     /*padding: 0 var(--side-padding); !* Add padding to the left and right so that the content always fits on the page *!*/
     height: 100%;
-    flex: 1;
+    /*flex: 1;*/
 }
 
 h1 {
