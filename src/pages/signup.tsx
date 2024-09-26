@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import OAuthLoginButton from '@/components/auth/OAuthLoginButton';
 
 export default function SignUp() {
     return (
@@ -9,6 +10,7 @@ export default function SignUp() {
             </Head>
             <div>
                 <h1>Sign Up</h1>
+                <OAuthLoginButton provider="google" buttonText="Sign up with Google" />
             </div>
         </>
     );
