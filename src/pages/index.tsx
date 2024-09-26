@@ -10,6 +10,7 @@ export default function Home() {
                 <meta name="description" content="Caster automates the forecasting process for ecommerce stores" />
             </Head>
             <div className='home-title-section'>
+                <div className="right-square"></div>
                 <div className='home-title'>
                     <h1>
                         AI-Powered <br></br>
@@ -30,7 +31,7 @@ export default function Home() {
                     </Link>
                     {/*<Link href="/comingsoon">Watch Demo</Link>*/}
                 </div>
-
+                <div className="left-square"></div>
             </div>
         </>
     );
