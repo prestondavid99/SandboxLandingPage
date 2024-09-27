@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
                 ) : (
                     <>
                         <li>
-                            <Link href="/comingsoon">
+                            <Link href="/signup">
                                 Log In
                             </Link>
                         </li>
