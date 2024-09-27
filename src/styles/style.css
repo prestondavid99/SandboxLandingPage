@@ -110,15 +110,11 @@ body {
     flex-direction: column;
 }
 
-
-
-
-
 main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
     padding: 0 var(--side-padding);    /*!* Add padding to the left and right so that the content always fits on the page *! */
     height: 100%;
-    /*flex: 1;*/
+    flex: 1; /* This ensures that <main> will take up all the remaining space on the page, pushing the navbar to the bottom of the page */
 }
 
 h1 {
@@ -266,7 +262,7 @@ For example, adding a text accent with the text-accent class.
     flex-direction: column;
     width: 50%;
     height: 100%;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     border-radius: 2rem;
     padding-bottom: 8rem;
@@ -345,7 +341,6 @@ footer {
     width: 100%;
     height: 15rem;
     margin-top: 1rem;
-    margin-bottom: 1rem;
     left: 0;
     right:0;
 }
@@ -507,11 +502,11 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: var(--secondary-color);
+    justify-content: center;
+    /* background: var(--secondary-color); */
     padding: 1.5rem;
     border-radius: 1rem;
-    margin-top: var(--spacing-x12);
+    /* margin-top: var(--spacing-x12); */
     width: 55%;
 }
 
