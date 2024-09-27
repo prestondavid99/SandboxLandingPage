@@ -20,6 +20,7 @@ Be very careful when changing any of these styles.
     --text-color: #000000;  /* Default text color */
     --button-gradient-color: #6960D2;
     --shadow-color: 0, 0, 0; /* black in rgb. Important that this stays rgb */
+    --left-square-gradient: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
 
     /* Defining our brand fonts */
     --font-primary: 'Raleway', sans-serif; /* Store the font family as a variable */
@@ -74,7 +75,9 @@ Be very careful when changing any of these styles.
 
 html {
     font-size: 16px; /* Default */
-    min-width: 100vw;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -82,8 +85,11 @@ body {
     color: var(--text-color); /* Apply default text color */
     background-color: var(--background-color-1); /* Set background color */
     font-weight: var(--font-weight-regular); /* Set default font weight */
+    margin: 0;
+    padding: 0;
     line-height: 1.6; /* Optional: improves readability by increasing line spacing */
-    min-width: 100vw;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .vsc-initialized {
@@ -105,9 +111,9 @@ body {
 
 main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
-    padding: 0 var(--side-padding); /* Add padding to the left and right so that the content always fits on the page */
+    padding: 0 var(--side-padding);    /*!* Add padding to the left and right so that the content always fits on the page *! */
     height: 100%;
-    flex: 1;
+    /*flex: 1;*/
 }
 
 h1 {
@@ -232,6 +238,7 @@ For example: styles for the navbar and footer.
     background-color: var(--background-color-1);
     width: 100%;
     height: var(--navbar-height);
+    z-index: 1000;
     padding: 0 var(--side-padding);
     position: fixed;
     top: 0;
@@ -334,6 +341,7 @@ footer {
     margin: 0.5rem 0;
     line-height: 1.5rem;
     text-align: left;
+    font-size: var(--paragraph-font-size);
 }
 
 .footer-column span:hover {
@@ -343,6 +351,8 @@ footer {
 @media (max-width: 600px) {
     footer {
         height: 100%;
+        width: 100vw;
+        box-sizing: inherit;
     }
 
     .footer-container {
@@ -377,12 +387,50 @@ Use section labels as needed for readability.
 /* ##### HOME PAGE ##### */
 
 .home-title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100vw;
+    height: 29rem;
+    justify-content: space-between;
+    margin-left: calc((-1 * var(--side-padding)) - 2%);
+}
+
+.home-content-section {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
+}
+
+.square-container {
+    display: flex;
+    width: 30rem;
+    height: 30rem;
+    overflow: hidden;
+}
+
+.left-square {
+    background: var(--left-square-gradient);
+    width: 75rem;
+    height: 75rem;
+    display: flex;
+    position: relative;
+    transform: rotate(-25deg);
+
+}
+
+.right-square {
+    background: var(--left-square-gradient);
+    width: 50rem;
+    height: 80rem;
+    transform: rotate(-25deg);
+    position: relative;
+    left: 15rem;
+    bottom: 10rem;
+    display: flex;
 }
 
 .home-title {
@@ -407,4 +455,21 @@ Use section labels as needed for readability.
 
 .home-links a {
     font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .home-title-section {
+        margin: 0;
+    }
+
+    .square-container {
+        display: none;
+    }
+
+    .home-links {
+        height: 5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+    }
 }
