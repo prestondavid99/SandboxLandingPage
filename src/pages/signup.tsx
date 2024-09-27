@@ -8,8 +8,17 @@ export default function SignUp() {
                 <meta name="description" content="Create a free account on Caster to get started with forecasting" />
             </Head>
             <div className="container">
-                <div className="white-container">
+                <div className="elevated-container">
                     <h2>Sign Up</h2>
+                    <div className="buttons button-oauth">
+                    <div className="oauth-container">
+                        <img
+                            src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
+                            alt="Google Logo" className="oauth-logo"/>
+                        <p>Continue with Google</p>
+                    </div>
+                    </div>
+
                 </div>
             </div>
         </>
