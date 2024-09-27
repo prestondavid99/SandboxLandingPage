@@ -16,7 +16,7 @@ export default function Home() {
                 <div className='home-content-section'>
                     <div className='home-title'>
                         <h1>
-                            One-click <br></br>
+                            One-click <br/>
                             <span className='text-accent'>cashflow</span> for <br/>
                             eCommerce
                         </h1>
@@ -38,7 +38,7 @@ export default function Home() {
                 <div className="square-container">
                     <div className="right-square"></div>
                 </div>
-                </div>
-            </>
-            );
-            }
+            </div>
+        </>
+    );
+}

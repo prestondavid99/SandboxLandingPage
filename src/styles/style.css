@@ -177,6 +177,12 @@ Mobile styles must appear AFTER the default/desktop style for it to work
         --h2-font-size: 1.5rem;
         --paragraph-font-size: 0.8rem;
     }
+
+    main {
+        height: 100%;
+        width: 100vw;
+        box-sizing: inherit;
+    }
 }
 
 /*
