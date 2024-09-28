@@ -53,6 +53,7 @@ Be very careful when changing any of these styles.
     /* Styling Variables */
     --navbar-height: var(--spacing-x20);
     --side-padding: 8%;
+    --drop-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);
 
     /* Defining screen sizes for responsiveness */
     --mobile-screen-width: 600px;
@@ -113,7 +114,7 @@ main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
     padding: 0 var(--side-padding);    /*!* Add padding to the left and right so that the content always fits on the page *! */
     height: 100%;
-    /*flex: 1;*/
+    flex: 1; /* This ensures that <main> will take up all the remaining space on the page, pushing the navbar to the bottom of the page */
 }
 
 h1 {
@@ -144,7 +145,7 @@ a {
 input[type="email"] {
     border: none;
     outline: none;
-    background-color: white;
+    background-color: var(--background-color-1);
     font-family: var(--font-primary), sans-serif;
 }
 
@@ -152,7 +153,7 @@ form {
     display: flex;
     padding: 10px;
     font-size: 1rem;
-    background-color: white;
+    background-color: var(--background-color-1);
     /*color: white;*/
     /*border: none;*/
     border-radius: 1rem;
@@ -175,6 +176,12 @@ Mobile styles must appear AFTER the default/desktop style for it to work
         --h1-font-size: 2rem;
         --h2-font-size: 1.5rem;
         --paragraph-font-size: 0.8rem;
+    }
+
+    main {
+        height: 100%;
+        width: 100vw;
+        box-sizing: inherit;
     }
 }
 
@@ -215,6 +222,29 @@ For example, adding a text accent with the text-accent class.
     background-image: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
 }
 
+.button-oauth {
+    background: var(--background-color-1);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border-radius: 1rem;
+    border-color: var(--primary-color);
+    border-style: solid;
+    border-width: 0.0625rem;
+}
+
+.oauth-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.oauth-logo {
+    margin-right: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
 .button-contained:hover {
     filter: brightness(85%);
 }
@@ -222,6 +252,38 @@ For example, adding a text accent with the text-accent class.
 .button-text {
     color: var(--primary-color);
 }
+
+.container {
+    width: 100%;
+    display: flex;
+    padding-top: var(--side-padding);
+    padding-bottom: var(--side-padding);
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.elevated-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 2rem;
+    padding-bottom: 8rem;
+    background: var(--background-color-1);
+    box-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);
+}
+
+@media (max-width: 600px) {
+    .elevated-container {
+        display: flex;
+        flex-direction: column;
+
+    }
+}
+
 
 /*
 ####################################
@@ -294,6 +356,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+
     padding: 1.5rem 0;
     box-sizing: border-box;
 }
@@ -445,11 +508,11 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: var(--secondary-color);
+    justify-content: center;
+    /* background: var(--secondary-color); */
     padding: 1.5rem;
     border-radius: 1rem;
-    margin-top: var(--spacing-x12);
+    /* margin-top: var(--spacing-x12); */
     width: 55%;
 }
 
