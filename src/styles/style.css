@@ -598,10 +598,11 @@ Use section labels as needed for readability.
 }
 
 .free-plan-promo-signup-container {
-    width: 25vw;
+    width: 20vw;
     min-width: fit-content;
-    height: 25vw;
+    height: 20vw;
     min-height: fit-content;
+    padding: 1rem;
     background-color: var(--background-color-1);
     border-radius: 2rem;
     border: 0.5rem solid var(--secondary-color);
