@@ -586,6 +586,37 @@ Use section labels as needed for readability.
     padding-left: 1.5rem;
 }
 
+.free-plan-promo {
+    width: 100%;
+    height: fit-content;
+    border-radius: 1rem;
+    padding: 3rem 0;
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.free-plan-promo-signup-container {
+    width: 25vw;
+    min-width: fit-content;
+    height: 25vw;
+    min-height: fit-content;
+    background-color: var(--background-color-1);
+    border-radius: 2rem;
+    border: 0.5rem solid var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.free-plan-price {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
 @media (max-width: 600px) {
     .home-container {
         min-width: 100vw;
@@ -626,5 +657,14 @@ Use section labels as needed for readability.
 
     .feature-text {
         order: 1; /* Move the text to the bottom */
+    }
+
+    .free-plan-promo {
+        flex-direction: column;
+    }
+
+    .free-plan-promo-signup-container {
+        width: 60vw;
+        height: 60vw;
     }
 }
