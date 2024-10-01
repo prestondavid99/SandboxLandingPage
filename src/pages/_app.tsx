@@ -8,8 +8,11 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import '../styles/style.css';
 import { EnvProvider, useEnv } from '../context/EnvContext';
+
+import '../styles/style.css';
+import '../styles/pages/signup.css';
+import '../styles/components/auth/oauth-login-button.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
