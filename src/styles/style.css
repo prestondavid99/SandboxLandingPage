@@ -20,7 +20,7 @@ Be very careful when changing any of these styles.
     --background-color-3: #cbb9e959; 
     --text-color: #000000;  /* Default text color */
     --button-gradient-color: #6960D2;
-    --shadow-color: 0, 0, 0; /* black in rgb. Important that this stays rgb */
+    --shadow-color: 0, 0, 0; /* black in rgba. Important that this stays rgb & not include opacity */
     --left-square-gradient: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
 
     /* Defining our brand fonts */
