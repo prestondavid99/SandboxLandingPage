@@ -17,6 +17,7 @@ Be very careful when changing any of these styles.
     --accent-color-3: #E9B9DF;
     --background-color-1: #ffffff;  /* Background color */
     --background-color-2: #D9D9D9;
+    --background-color-3: #cbb9e959;
     --text-color: #000000;  /* Default text color */
     --button-gradient-color: #6960D2;
     --shadow-color: 0, 0, 0; /* black in rgb. Important that this stays rgb */
@@ -54,6 +55,7 @@ Be very careful when changing any of these styles.
     --navbar-height: var(--spacing-x20);
     --side-padding: 8%;
     --drop-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);
+    --inset-shadow: inset 0 4px 4px rgba(var(--shadow-color), 0.25);
 
     /* Defining screen sizes for responsiveness */
     --mobile-screen-width: 600px;
@@ -69,20 +71,23 @@ Be very careful when changing any of these styles.
     --accent-color-3: #F2D7EF;
     --background-color-1: #121212;
     --background-color-2: #333333;
+    --background-color-3: #4c2a7959;
     --text-color: #ffffff;
     --button-gradient-color: #4F46E5;
     --shadow-color: 255, 255, 255; /* rbg for white. important that this stays in rgb not hex */
 }
 
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* border-box is the default box-sizing, allowing us to use padding and border in our elements */
 }
+
 
 html {
     font-size: 16px; /* Default */
-    width: 100%;
+    min-width: 100vw;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 body {
@@ -97,13 +102,6 @@ body {
     overflow-x: hidden;
 }
 
-.vsc-initialized {
-    height: 100%;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
 #__next {
     height: 100%;
     min-height: 100vh;
@@ -112,6 +110,7 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 
@@ -124,6 +123,7 @@ main {
     height: 100%;
     width: 100%;
     flex: 1;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -298,11 +298,11 @@ For example: styles for the navbar and footer.
     top: 0;
     left: 0;
     right:0;
-    box-sizing: border-box; /* Ensures padding is included in the total width */
     box-shadow: 0 4px 4px rgba(var(--shadow-color), 0.25);  /* Offset-x, Offset-y, Blur-radius, and Color */
     display: flex;
     justify-content: space-between;
     align-items: center; /* Vertically center elements */
+    overflow-x: hidden;
 }
 
 .navbar ul {
@@ -335,13 +335,11 @@ footer {
     text-align: center;
     padding: 0 var(--side-padding);
     color: #000;
-    box-sizing: border-box;
     width: 100%;
-    height: 15rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    height: fit-content;
     left: 0;
     right:0;
+    overflow-x: hidden;
 }
 
 .footer-container {
@@ -349,9 +347,7 @@ footer {
     justify-content: space-between;
     align-items: center;
     height: 100%;
-
     padding: 1.5rem 0;
-    box-sizing: border-box;
 }
 
 .footer-left {
@@ -408,7 +404,6 @@ footer {
     footer {
         height: 100%;
         width: 100vw;
-        box-sizing: inherit;
     }
 
     .footer-container {
@@ -442,14 +437,21 @@ Use section labels as needed for readability.
 
 /* ##### HOME PAGE ##### */
 
+.home-container {
+    height: 100%;
+    width: 100vw;
+    margin: 0 calc((var(--side-padding) * -1) - 1.5%);
+}
+
 .home-title-section {
+    position: relative;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     width: 100vw;
-    height: 29rem;
-    justify-content: space-between;
-    margin-left: calc((-1 * var(--side-padding)) - 2%);
+    height: 30rem;
+    overflow: hidden;
 }
 
 .home-content-section {
@@ -462,31 +464,30 @@ Use section labels as needed for readability.
 }
 
 .square-container {
+    position: relative;
     display: flex;
-    width: 30rem;
-    height: 30rem;
+    width: 45rem;
+    height: 100%;
     overflow: hidden;
 }
 
 .left-square {
     background: var(--left-square-gradient);
-    width: 75rem;
-    height: 75rem;
-    display: flex;
-    position: relative;
+    width: 200vw;
+    height: 200vh;
     transform: rotate(-25deg);
-
+    position: relative;
+    bottom: 38%;
 }
 
 .right-square {
     background: var(--left-square-gradient);
-    width: 50rem;
-    height: 80rem;
+    width: 200vw;
+    height: 200vh;
     transform: rotate(-25deg);
     position: relative;
-    left: 15rem;
-    bottom: 10rem;
-    display: flex;
+    left: 85%;
+    bottom: 40%;
 }
 
 .home-title {
@@ -501,11 +502,11 @@ Use section labels as needed for readability.
 .home-links {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background: var(--secondary-color);
+    justify-content: center;
+    /* background: var(--secondary-color); */
     padding: 1.5rem;
     border-radius: 1rem;
-    margin-top: var(--spacing-x12);
+    /* margin-top: var(--spacing-x12); */
     width: 55%;
 }
 
@@ -513,7 +514,104 @@ Use section labels as needed for readability.
     font-weight: bold;
 }
 
+.feature-card {
+    width: 100%;
+    min-height: 20rem;
+    padding: 3rem 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.purple-bg {
+    background-color: var(--background-color-3);
+}
+
+.feature-content {
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--side-padding);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-content-container {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-visual {
+    min-width: 20vw;
+    max-width: 75%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.feature-visual img {
+    width: 100%;
+    height: 100%;
+}
+
+.feature-text {
+    width: fit-content;
+}
+
+.feature-text h2 {
+    margin: 0;
+    line-height: 2rem;
+}
+
+.feature-text ul {
+    margin-top: 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.free-plan-promo {
+    width: 100%;
+    height: fit-content;
+    border-radius: 1rem;
+    padding: 3rem 0;
+    margin: 3rem 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.free-plan-promo-signup-container {
+    width: 20vw;
+    min-width: fit-content;
+    height: 20vw;
+    min-height: fit-content;
+    padding: 1rem;
+    background-color: var(--background-color-1);
+    border-radius: 2rem;
+    border: 0.5rem solid var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.free-plan-price {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
 @media (max-width: 600px) {
+    .home-container {
+        min-width: 100vw;
+    }
+
     .home-title-section {
         margin: 0;
     }
@@ -527,5 +625,36 @@ Use section labels as needed for readability.
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .feature-card {
+        flex-direction: column;
+    }
+
+    .feature-content {
+        flex-direction: column;
+    }
+
+    .feature-content-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .feature-visual {
+        order: 0; /* Move the visual to the top */
+        padding-bottom: 1.25rem;
+    }
+
+    .feature-text {
+        order: 1; /* Move the text to the bottom */
+    }
+
+    .free-plan-promo {
+        flex-direction: column;
+    }
+
+    .free-plan-promo-signup-container {
+        width: 60vw;
+        height: 60vw;
     }
 }
