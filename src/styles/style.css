@@ -113,10 +113,6 @@ body {
     overflow-x: hidden;
 }
 
-
-
-
-
 main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
     padding: 0 var(--side-padding);    /*!* Add padding to the left and right so that the content always fits on the page *! */
@@ -220,7 +216,7 @@ button {
     font-weight: var(--font-weight-regular);
     color: var(--text-color);
     text-transform: none;
-    transition: background-color 0.1s ease;
+    transition: var(--background-color) 0.1s ease;
     cursor: pointer;
     margin-right: 1rem;
     margin-left: 1rem;
@@ -233,9 +229,11 @@ button:hover {
 
 .button-contained {
     background-image: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
+    font-size: var(--paragraph-font-size);
+    font-family: var(--font-primary), sans-serif; /* Use the primary font for paragraphs */
+    font-weight: var(--font-weight-regular);
+    text-transform: none;
 }
-
-
 
 .button-contained:hover {
     filter: brightness(85%);
