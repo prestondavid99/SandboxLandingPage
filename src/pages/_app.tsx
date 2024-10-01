@@ -1,5 +1,4 @@
-// This page is the root of our app.
-// Every other page we build will be a child of this page.
+// pages/_app.tsx
 
 import { useState } from 'react';
 import type { AppProps } from 'next/app';
@@ -9,21 +8,22 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import { EnvProvider, useEnv } from '../context/EnvContext';
+
 import '../styles/style.css';
 import '../styles/pages/signup.css';
 import '../styles/components/auth/oauth-login-button.css'
 
-
 function MyApp({ Component, pageProps }: AppProps) {
-    const isProduction = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production';
+    return (
+        <EnvProvider>
+            <AppContent Component={Component} pageProps={pageProps} />
+        </EnvProvider>
+    );
+}
 
-    const supabaseUrl = isProduction
-    ? process.env.NEXT_PUBLIC_SUPABASE_URL_PROD
-    : process.env.NEXT_PUBLIC_SUPABASE_URL_DEV;
-
-    const supabaseAnonKey = isProduction
-    ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD
-    : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_DEV;
+const AppContent = ({ Component, pageProps }: { Component: any; pageProps: any }) => {
+    const { supabaseUrl, supabaseAnonKey } = useEnv();
 
     const [supabaseClient] = useState<SupabaseClient>(() =>
         createPagesBrowserClient({
@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             supabaseKey: supabaseAnonKey as string,
         })
     );
-    
+
     return (
         <SessionContextProvider
             supabaseClient={supabaseClient}
@@ -47,6 +47,6 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Footer />
         </SessionContextProvider>
     );
-}
+};
 
 export default MyApp;
