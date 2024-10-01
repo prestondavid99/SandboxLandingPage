@@ -466,18 +466,18 @@ Use section labels as needed for readability.
 .square-container {
     position: relative;
     display: flex;
-    width: 45rem;
-    height: 100%;
+    width: 50rem;
+    height: 100vw;
     overflow: hidden;
 }
 
 .left-square {
     background: var(--left-square-gradient);
     width: 200vw;
-    height: 200vh;
+    height: 300vh;
     transform: rotate(-25deg);
     position: relative;
-    bottom: 20rem;
+    bottom: -7rem;
 }
 
 .right-square {
@@ -487,7 +487,7 @@ Use section labels as needed for readability.
     transform: rotate(-25deg);
     position: relative;
     left: 85%;
-    bottom: 16rem;
+    bottom: -5rem;
 }
 
 .home-title {
