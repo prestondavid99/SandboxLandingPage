@@ -10,6 +10,9 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import '../styles/style.css';
+import '../styles/pages/signup.css';
+import '../styles/components/auth/oauth-login-button.css'
+
 
 function MyApp({ Component, pageProps }: AppProps) {
     const isProduction = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production';
