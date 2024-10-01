@@ -477,7 +477,7 @@ Use section labels as needed for readability.
     height: 200vh;
     transform: rotate(-25deg);
     position: relative;
-    bottom: 38%;
+    bottom: 20rem;
 }
 
 .right-square {
@@ -487,7 +487,7 @@ Use section labels as needed for readability.
     transform: rotate(-25deg);
     position: relative;
     left: 85%;
-    bottom: 40%;
+    bottom: 16rem;
 }
 
 .home-title {
