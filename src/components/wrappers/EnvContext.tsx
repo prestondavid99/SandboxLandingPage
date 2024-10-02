@@ -2,18 +2,18 @@
 // This file allows us to 
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import { getEnvVars } from '../lib/env';
+import { getEnvVars } from '../../lib/env';
 
 // Define the shape of your environment variables
 interface EnvContextType {
     isProduction: boolean;
     baseUrl: string;
     supabaseUrl: string;
-    supabaseAnonKey: string;
+    supabaseKey: string;
     quickbooksClientId: string;
     quickbooksSecretKey: string;
-    quickbooksAccountingApi: string;  // Include all required variables
-    quickbooksPaymentsApi: string;     // Include all required variables
+    quickbooksAccountingApi: string;
+    quickbooksPaymentsApi: string;
 }
 
 const EnvContext = createContext<EnvContextType | undefined>(undefined);
@@ -26,7 +26,7 @@ export const EnvProvider = ({ children }: { children: ReactNode }) => {
         isProduction: envVars.isProduction as boolean,
         baseUrl: envVars.baseUrl as string,
         supabaseUrl: envVars.supabaseUrl as string,
-        supabaseAnonKey: envVars.supabaseAnonKey as string,
+        supabaseKey: envVars.supabaseKey as string,
         quickbooksClientId: envVars.quickbooksClientId as string,
         quickbooksSecretKey: envVars.quickbooksSecretKey as string,
         quickbooksAccountingApi: envVars.quickbooksAccountingApi as string,

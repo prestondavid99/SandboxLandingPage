@@ -8,7 +8,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { EnvProvider, useEnv } from '../context/EnvContext';
+import { EnvProvider, useEnv } from '../components/wrappers/EnvContext';
 
 import '../styles/style.css';
 import '../styles/pages/signup.css';
@@ -23,12 +23,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 const AppContent = ({ Component, pageProps }: { Component: any; pageProps: any }) => {
-    const { supabaseUrl, supabaseAnonKey } = useEnv();
+    const { supabaseUrl, supabaseKey } = useEnv();
 
     const [supabaseClient] = useState<SupabaseClient>(() =>
         createPagesBrowserClient({
-            supabaseUrl: supabaseUrl as string,
-            supabaseKey: supabaseAnonKey as string,
+            supabaseUrl: supabaseUrl,
+            supabaseKey: supabaseKey,
         })
     );
 

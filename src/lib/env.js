@@ -7,7 +7,7 @@ export const getEnvVars = () => {
 
     return {
         // General
-        isProduction: process.env.NEXT_PUBLIC_ENVIRONMENT === 'production',
+        isProduction: isProduction,
         
         baseUrl: isProduction
             ? process.env.NEXT_PUBLIC_BASE_URL_PROD
@@ -18,7 +18,7 @@ export const getEnvVars = () => {
             ? process.env.NEXT_PUBLIC_SUPABASE_URL_PROD
             : process.env.NEXT_PUBLIC_SUPABASE_URL_DEV,
 
-        supabaseAnonKey: isProduction
+        supabaseKey: isProduction
             ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_PROD
             : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_DEV,
 

@@ -9,14 +9,16 @@ import Snackbar from '@mui/material/Snackbar';
 
 export default function Profile() {
     const session = useSession();
-    const router = useRouter();
+    //const router = useRouter();
     const supabase = useSupabaseClient();
-    const [companyExists, setCompanyExists] = useState(false);
+
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [companyExists, setCompanyExists] = useState(false);
+    const [companyId, setCompanyId] = useState('');
     const [companyName, setCompanyName] = useState('');
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
-    const [companyId, setCompanyId] = useState('');
-    const [isEditing, setIsEditing] = useState(false); // State for tracking edit mode
 
     useEffect(() => {
         const checkCompany = async () => {

@@ -2,5 +2,5 @@
 export type Company = {
     id: number; // or string, depending on your database schema
     name: string;
-    quickbooks_company_id: string;
+    NEXT_PUBLIC_QUICKBOOKS_company_id: string;
 };

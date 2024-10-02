@@ -30,7 +30,7 @@ export default async function callback(req: NextApiRequest, res: NextApiResponse
         // Step 2: Save the tokens to the user's session or database
         // Depending on your setup, you may want to store these in a user session or database.
         // For example:
-        // await supabase.from('users').update({ quickbooks_access_token: access_token, quickbooks_refresh_token: refresh_token }).eq('id', session.user.id);
+        // await supabase.from('users').update({ NEXT_PUBLIC_QUICKBOOKS_access_token: access_token, NEXT_PUBLIC_QUICKBOOKS_refresh_token: refresh_token }).eq('id', session.user.id);
 
         return res.redirect('/profile'); // Redirect back to the profile page
     } catch (error) {
