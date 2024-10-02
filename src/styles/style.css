@@ -17,10 +17,10 @@ Be very careful when changing any of these styles.
     --accent-color-3: #E9B9DF;
     --background-color-1: #ffffff;  /* Background color */
     --background-color-2: #D9D9D9;
-    --background-color-3: #cbb9e959; 
+    --background-color-3: #cbb9e959;
     --text-color: #000000;  /* Default text color */
     --button-gradient-color: #6960D2;
-    --shadow-color: 0, 0, 0; /* black in rgb. Important that this stays rgb */
+    --shadow-color: 0, 0, 0; /* black in rgba. Important that this stays rgb & not include opacity */
     --left-square-gradient: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
 
     /* Defining our brand fonts */
@@ -117,7 +117,8 @@ main {
     margin-top: var(--navbar-height);  /* This must match the navbar height so that it doesn't get cut off  */
     padding: 0 var(--side-padding);    /*!* Add padding to the left and right so that the content always fits on the page *! */
     height: 100%;
-    flex: 1; /* This ensures that <main> will take up all the remaining space on the page, pushing the navbar to the bottom of the page */
+    width: 100%;
+    flex: 1;
     overflow-x: hidden;
 }
 
@@ -181,11 +182,6 @@ Mobile styles must appear AFTER the default/desktop style for it to work
         --h2-font-size: 1.5rem;
         --paragraph-font-size: 0.8rem;
     }
-
-    main {
-        height: 100%;
-        width: 100vw;
-    }
 }
 
 /*
@@ -214,38 +210,29 @@ For example, adding a text accent with the text-accent class.
     text-shadow: 2px 2px 4px rgb(var(--shadow-color));
 }
 
-.button {
+button {
     font-size: var(--paragraph-font-size);
     font-family: var(--font-primary), sans-serif; /* Use the primary font for paragraphs */
     font-weight: var(--font-weight-regular);
+    color: var(--text-color);
     text-transform: none;
+    transition: var(--background-color) 0.1s ease;
+    cursor: pointer;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
+button:hover {
+    background-color: var(--background-color-2);
+    user-focus-pointer: auto;
 }
 
 .button-contained {
     background-image: linear-gradient(to right, var(--primary-color), var(--button-gradient-color));
-}
-
-.button-oauth {
-    background: var(--background-color-1);
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-    border-radius: 1rem;
-    border-color: var(--primary-color);
-    border-style: solid;
-    border-width: 0.0625rem;
-}
-
-.oauth-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-}
-
-.oauth-logo {
-    margin-right: 1rem;
-    width: 1.5rem;
-    height: 1.5rem;
+    font-size: var(--paragraph-font-size);
+    font-family: var(--font-primary), sans-serif; /* Use the primary font for paragraphs */
+    font-weight: var(--font-weight-regular);
+    text-transform: none;
 }
 
 .button-contained:hover {
@@ -271,7 +258,7 @@ For example, adding a text accent with the text-accent class.
     flex-direction: column;
     width: 50%;
     height: 100%;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     border-radius: 2rem;
     padding-bottom: 8rem;
@@ -477,18 +464,18 @@ Use section labels as needed for readability.
 .square-container {
     position: relative;
     display: flex;
-    width: 45rem;
-    height: 100%;
+    width: 50rem;
+    height: 100vw;
     overflow: hidden;
 }
 
 .left-square {
     background: var(--left-square-gradient);
     width: 200vw;
-    height: 200vh;
+    height: 300vh;
     transform: rotate(-25deg);
     position: relative;
-    bottom: 38%;
+    bottom: -7rem;
 }
 
 .right-square {
@@ -498,7 +485,7 @@ Use section labels as needed for readability.
     transform: rotate(-25deg);
     position: relative;
     left: 85%;
-    bottom: 40%;
+    bottom: -5rem;
 }
 
 .home-title {
@@ -635,7 +622,7 @@ Use section labels as needed for readability.
         height: 5rem;
         display: flex;
         flex-direction: column;
-        align-items: space-between;
+        align-items: center;
     }
 
     .feature-card {
