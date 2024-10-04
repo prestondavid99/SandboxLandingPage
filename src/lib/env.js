@@ -23,20 +23,24 @@ export const getEnvVars = () => {
             : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY_DEV,
 
         // Quickbooks
+        quickbooksEnvironment: isProduction
+            ? process.env.QUICKBOOKS_ENVIRONMENT_PROD
+            : process.env.QUICKBOOKS_ENVIRONMENT_DEV,
+
         quickbooksClientId: isProduction
-            ? process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID_PROD
-            : process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID_DEV,
+            ? process.env.QUICKBOOKS_CLIENT_ID_PROD
+            : process.env.QUICKBOOKS_CLIENT_ID_DEV,
 
         quickbooksSecretKey: isProduction
-            ? process.env.NEXT_PUBLIC_QUICKBOOKS_SECRET_KEY_PROD
-            : process.env.NEXT_PUBLIC_QUICKBOOKS_SECRET_KEY_DEV,
+            ? process.env.QUICKBOOKS_SECRET_KEY_PROD
+            : process.env.QUICKBOOKS_SECRET_KEY_DEV,
 
         quickbooksAccountingApi: isProduction
-            ? process.env.NEXT_PUBLIC_QUICKBOOKS_ACCOUNTING_API_PROD
-            : process.env.NEXT_PUBLIC_QUICKBOOKS_ACCOUNTING_API_DEV,
+            ? process.env.QUICKBOOKS_ACCOUNTING_API_PROD
+            : process.env.QUICKBOOKS_ACCOUNTING_API_DEV,
 
         quickbooksPaymentsApi: isProduction
-            ? process.env.NEXT_PUBLIC_QUICKBOOKS_PAYMENTS_API_PROD
-            : process.env.NEXT_PUBLIC_QUICKBOOKS_PAYMENTS_API_DEV,
+            ? process.env.QUICKBOOKS_PAYMENTS_API_PROD
+            : process.env.QUICKBOOKS_PAYMENTS_API_DEV,
     };
 };

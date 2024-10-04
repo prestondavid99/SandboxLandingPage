@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
@@ -9,14 +8,17 @@ import Snackbar from '@mui/material/Snackbar';
 
 export default function Profile() {
     const session = useSession();
-    const router = useRouter();
     const supabase = useSupabaseClient();
+
     const [companyExists, setCompanyExists] = useState(false);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [companyName, setCompanyName] = useState('');
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
     const [companyId, setCompanyId] = useState('');
-    const [isEditing, setIsEditing] = useState(false); // State for tracking edit mode
+
+    const [qbAccessToken, setQbAccessToken] = useState(null);
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const checkCompany = async () => {
@@ -31,7 +33,7 @@ export default function Profile() {
                     setCompanyExists(true);
                     const companyData = await supabase
                         .from('company')
-                        .select('name, quickbooks_company_id, id')
+                        .select('id, name, quickbooks_company_id, quickbooks_access_token')
                         .eq('id', data.company_id)
                         .single();
 
@@ -39,6 +41,7 @@ export default function Profile() {
                         setCompanyName(companyData.data.name);
                         setQuickbooksCompanyId(companyData.data.quickbooks_company_id);
                         setCompanyId(companyData.data.id);
+                        setQbAccessToken(companyData.data.quickbooks_access_token);
                     }
                 } else {
                     setCompanyExists(false);
@@ -157,6 +160,24 @@ export default function Profile() {
                                     </Button>
                                 </>
                             )}
+                            <br/>
+                            {qbAccessToken ? (
+                                <>
+                                    <p>Your QuickBooks is Connected</p>
+                                </>
+                            ) : (
+                                <>
+                                <Link href="/api/quickbooks/connect">
+                                    <Button
+                                        className='button button-contained'
+                                        variant="contained"
+                                    >
+                                        Connect Your QuickBooks
+                                    </Button>
+                                </Link>
+                                </>
+                            )}
+                            
                         </>
                     ) : (
                         <>
