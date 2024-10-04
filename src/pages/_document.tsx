@@ -1,12 +1,11 @@
 import { Html, Head, Main, NextScript } from 'next/document'
-import { Toaster } from "react-hot-toast";
 
 export default function Document() {
     return (
         <Html lang="en">
             <Head>
                 <meta charSet="UTF-8"/>
-                <link rel="icon" href="/favicon.ico"/>
+                <link rel="icon" href="/favicon/favicon.ico" type="image/x-icon"/>
                 <link rel="preconnect" href="https://fonts.googleapis.com"/>
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
                 <link
@@ -24,7 +23,6 @@ export default function Document() {
             <body>
                 <Main/>
                 <NextScript/>
-                <Toaster />
             </body>
         </Html>
     )

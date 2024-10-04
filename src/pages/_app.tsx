@@ -8,7 +8,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { EnvProvider, useEnv } from '../context/EnvContext';
+import { EnvProvider, useEnv } from '../components/wrappers/context/EnvContext';
 
 import '../styles/style.css';
 import '../styles/pages/signup.css';

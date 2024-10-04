@@ -13,6 +13,11 @@ const Navbar: React.FC = () => {
                 {session ? (
                     <>
                         <li>
+                            <Link href="/cashflow">
+                                Cashflow
+                            </Link>
+                        </li>
+                        <li>
                             <Link href="/profile">
                                 Profile
                             </Link>
