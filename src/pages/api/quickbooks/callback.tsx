@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .update({
                 quickbooks_access_token: access_token,
                 quickbooks_refresh_token: refresh_token,
-                quickbooks_expires_in: new Date(Date.now() + expires_in * 1000), // Set expiry time (multiply by 1000 since JS works in milliseconds and this is in seconds)
+                quickbooks_expires_at: new Date(Date.now() + expires_in * 1000), // Set expiry time (multiply by 1000 since JS works in milliseconds and this is in seconds)
             })
             .eq('quickbooks_company_id', realmId); // Match realmId with quickbooks_company_id
 

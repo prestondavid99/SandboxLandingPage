@@ -15,7 +15,8 @@ export default function Profile() {
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
     const [companyId, setCompanyId] = useState('');
 
-    const [qbAccessToken, setQbAccessToken] = useState(null);
+    const [qbExpiresAt, setQbExpiresAt] = useState<string | null>(null);
+    const currentDateTime = new Date();
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -33,7 +34,7 @@ export default function Profile() {
                     setCompanyExists(true);
                     const companyData = await supabase
                         .from('company')
-                        .select('id, name, quickbooks_company_id, quickbooks_access_token')
+                        .select('id, name, quickbooks_company_id, quickbooks_expires_at')
                         .eq('id', data.company_id)
                         .single();
 
@@ -41,7 +42,7 @@ export default function Profile() {
                         setCompanyName(companyData.data.name);
                         setQuickbooksCompanyId(companyData.data.quickbooks_company_id);
                         setCompanyId(companyData.data.id);
-                        setQbAccessToken(companyData.data.quickbooks_access_token);
+                        setQbExpiresAt(companyData.data.quickbooks_expires_at);
                     }
                 } else {
                     setCompanyExists(false);
@@ -51,6 +52,13 @@ export default function Profile() {
         checkCompany();
     }, [session, supabase]);
 
+    // check if the token is expired
+    // MUST occur after setting the qbExpiresAt variable! (done in the useEffect above)
+    let tokenIsExpired = true;
+    if (qbExpiresAt) {
+        const qbExpireDate = new Date(qbExpiresAt);
+        tokenIsExpired = currentDateTime.getTime() >= qbExpireDate.getTime();
+    }
     const handleCreateCompany = async () => {
         if (!companyName || !quickbooksCompanyId) {
             setOpenSnackbar(true);
@@ -109,7 +117,6 @@ export default function Profile() {
             {session ? (
                 <>
                     <h1>{session.user.user_metadata.full_name}'s Profile</h1>
-                    <p>{session.user.user_metadata.full_name}</p>
 
                     {companyExists ? (
                         <>
@@ -161,7 +168,7 @@ export default function Profile() {
                                 </>
                             )}
                             <br/>
-                            {qbAccessToken ? (
+                            {!tokenIsExpired ? (
                                 <>
                                     <p>Your QuickBooks is Connected</p>
                                 </>
