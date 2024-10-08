@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { useDispatch } from 'react-redux';
 import { getEnvVars } from '@/lib/env';
 import { createClient } from '@supabase/supabase-js';
+import {setCompanyId} from "@/redux/companySlice";
+
 
 const OAuthClient = require('intuit-oauth');
 const { baseUrl, quickbooksClientId, quickbooksSecretKey, quickbooksEnvironment } = getEnvVars();
@@ -11,6 +14,7 @@ const config = {
     redirectUri: `${baseUrl}/api/quickbooks/callback`,
 };
 const oauthClient = new OAuthClient(config);
+const dispatch = useDispatch();
 
 const { supabaseUrl, supabaseAnonKey } = getEnvVars();
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
@@ -18,6 +22,19 @@ const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 // API route to handle the OAuth callback
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, state, realmId } = req.query;
+
+    // Check if realmId is of type string
+    if (typeof realmId === 'string') {
+        // Dispatch only if realmId is a single string
+        dispatch(setCompanyId(realmId));
+    } else if (Array.isArray(realmId)) {
+        // If realmId is an array, take the first element (assuming it's a single value)
+        dispatch(setCompanyId(realmId[0]));
+    } else {
+        // If realmId is undefined or not a valid string, handle it accordingly
+        console.error('realmId is missing or invalid');
+        return res.status(400).json({ error: 'realmId is missing or invalid' });
+    }
 
     if (!code) {
         return res.status(400).json({ error: 'Authorization code is missing' });

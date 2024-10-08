@@ -5,6 +5,8 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { createPagesBrowserClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { Provider } from 'react-redux';
+import store from '../redux/store'; // Import your store
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
@@ -16,9 +18,11 @@ import '../styles/components/auth/oauth-login-button.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <EnvProvider>
-            <AppContent Component={Component} pageProps={pageProps} />
-        </EnvProvider>
+        <Provider store={store}>
+            <EnvProvider>
+                <AppContent Component={Component} pageProps={pageProps} />
+            </EnvProvider>
+        </Provider>
     );
 }
 

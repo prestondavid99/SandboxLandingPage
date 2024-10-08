@@ -2,14 +2,18 @@
 
 import fetch from 'node-fetch'; // Import fetch to make HTTP requests. Ensure `node-fetch` is installed by running: npm install node-fetch
 import { createClient } from '@supabase/supabase-js';
-import { getEnvVars } from "@/lib/env"; // Import environment variables
+import { getEnvVars } from "@/lib/env";
+import {refreshQuickBooksToken} from "@/pages/api/quickbooks/refresh"; // Import environment variables
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 // Retrieve Supabase environment variables
 const { supabaseUrl, supabaseAnonKey } = getEnvVars();
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+const companyId = useSelector((state: RootState) => state.company.companyId);
 
 // Define the type for the response (optional, helps with TypeScript type safety)
-interface ReportResponse {
+export interface ReportResponse {
     Header: {
         ReportName: string;
         StartPeriod: string;
@@ -18,28 +22,11 @@ interface ReportResponse {
     Rows: any; // You can define a more specific type if the structure of rows is known
 }
 
-// Function to get access token from Supabase
-async function getAccessToken(companyId: string): Promise<string | null> {
-    // Query Supabase to retrieve the access token for the given companyId
-    const { data, error } = await supabase
-        .from('company') // Replace 'company' with the name of your table storing tokens
-        .select('quickbooks_access_token')
-        .eq('quickbooks_company_id', companyId)
-        .single(); // We expect only one record per companyId
-
-    if (error) {
-        console.error('Failed to fetch access token from Supabase:', error);
-        return null;
-    }
-
-    return data ? data.quickbooks_access_token : null;
-}
-
 // Define a function to get the Cash Flow report
-export async function getCashFlowReport(companyId: string): Promise<ReportResponse | null> {
+export async function getCashFlowReport(): Promise<ReportResponse | null> {
     try {
         // Retrieve the access token from Supabase
-        const accessToken = await getAccessToken(companyId);
+        const accessToken = await refreshQuickBooksToken(companyId!);
 
         if (!accessToken) {
             throw new Error('Access token is missing or invalid');
