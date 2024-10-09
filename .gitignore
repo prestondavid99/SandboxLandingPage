@@ -7,7 +7,7 @@
 .yarn/install-state.gz
 
 # google authentication
-credentials.json
+src/pages/api/google-sheets/credentials.json
 google-token.json
 
 # testing

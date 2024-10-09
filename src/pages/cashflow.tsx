@@ -5,6 +5,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import { useEnv } from '../components/wrappers/context/EnvContext';
+import SignOutButton from "@/components/auth/SignOutButton";
+import EmbedGoogleSheet from "@/components/goog/EmbedGoogleSheet";
 
 export default function Profile() {
     const session = useSession();
@@ -82,7 +84,9 @@ export default function Profile() {
             </Head>
 
             {session ? (
+
                 <>
+                    <EmbedGoogleSheet/>
                     {companyExists ? (
                         <>
                             <h1>{companyName}'s Cashflow Dashboard</h1>

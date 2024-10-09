@@ -14,5 +14,4 @@ async function testListMajors() {
     }
 }
 
-// Execute the test function
-testListMajors();
+testListMajors()
