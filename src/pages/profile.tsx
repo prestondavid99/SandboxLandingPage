@@ -174,14 +174,14 @@ export default function Profile() {
                                 </>
                             ) : (
                                 <>
-                                <Link href="/api/quickbooks/connect">
-                                    <Button
-                                        className='button button-contained'
-                                        variant="contained"
-                                    >
-                                        Connect Your QuickBooks
-                                    </Button>
-                                </Link>
+                                    <Link href="/api/quickbooks/connect">
+                                        <Button
+                                            className='button button-contained'
+                                            variant="contained"
+                                        >
+                                            Connect Your QuickBooks
+                                        </Button>
+                                    </Link>
                                 </>
                             )}
                             

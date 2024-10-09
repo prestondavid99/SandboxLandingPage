@@ -18,6 +18,7 @@
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.7",
     "depcheck": "^1.4.7",
+    "fs": "^0.0.1-security",
     "intuit-oauth": "^4.1.2",
     "next": "14.2.13",
     "react": "^18",
