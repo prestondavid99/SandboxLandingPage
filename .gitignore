@@ -6,6 +6,10 @@
 .pnp.js
 .yarn/install-state.gz
 
+# google authentication
+credentials.json
+google-token.json
+
 # testing
 /coverage
 
