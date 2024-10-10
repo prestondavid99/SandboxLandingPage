@@ -4,19 +4,26 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import React from 'react';
+import { findRow } from '@/lib/quickbooksData';
+import { BalanceSheetReport, Row, ColData } from "@/types/types";
 
-export default function Profile() {
+export default function Cashflow() {
     const session = useSession();
     const supabase = useSupabaseClient();
+    const [error, setError] = useState<string | null>(null);
 
+    // company info
     const [companyExists, setCompanyExists] = useState(false);
     const [companyName, setCompanyName] = useState('');
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
 
+    // quickbooks reports
     const [cashflowReport, setCashflowReport] = useState(null);
     const [transactionList, setTransactionList] = useState(null);
-    const [balanceSheetReport, setBalanceSheetReport] = useState(null);
-    const [error, setError] = useState(null);
+    const [balanceSheetReport, setBalanceSheetReport] = useState<BalanceSheetReport | null>(null);
+
+    // financial data extracted from quickbooks reports
+    const [bankBalance, setBankBalance] = useState<number | null>(null);
 
     // check if the user belongs to a company
     useEffect(() => {
@@ -69,6 +76,33 @@ export default function Profile() {
         fetchCashflowData();
     }, [companyExists, quickbooksCompanyId]);
 
+    useEffect(() => {
+        // ensure balanceSheetReport is not null
+        if (balanceSheetReport) {
+            console.log('##### balanceSheetReport #####');
+            console.log(balanceSheetReport);
+
+            const baRow = findRow(balanceSheetReport!.Rows.Row[0], 'Bank Accounts');
+            setBankBalance(baRow.Summary.ColData[1].value);
+        }
+    }, [balanceSheetReport]);
+
+    useEffect(() => {
+        // ensure cashflowReport is not null
+        if (cashflowReport) {
+            console.log('##### cashflowReport #####');
+            console.log(cashflowReport);
+        }
+    }, [cashflowReport]);
+
+    useEffect(() => {
+        // ensure transactionList is not null
+        if (transactionList) {
+            console.log('##### transactionList #####');
+            console.log(transactionList);
+        }
+    }, [transactionList]);
+
     return (
         <>
             <Head>
@@ -83,6 +117,8 @@ export default function Profile() {
                             <h1>{companyName}'s Cashflow Dashboard</h1>
                             {cashflowReport ? (
                                 <>
+                                    <h2>Cashflow Report</h2>
+
                                     <h3>Sources</h3>
                                     <ul>
                                         <li>Shopify (Net of Fees): </li>
@@ -101,17 +137,8 @@ export default function Profile() {
 
                                     <h3>Cash Balance</h3>
                                     <ul>
-                                        <li>Balance: </li>
+                                        <li>Total Bank Balance: ${bankBalance}</li>
                                     </ul>
-
-                                    <h2>Cashflow Report</h2>
-                                    <pre>{JSON.stringify(cashflowReport, null, 2)}</pre>
-
-                                    <h2>Transaction List</h2>
-                                    <pre>{JSON.stringify(transactionList, null, 2)}</pre>
-
-                                    <h2>Balance Sheet Report</h2>
-                                    <pre>{JSON.stringify(balanceSheetReport, null, 2)}</pre>
                                 </>
                             ) : error ? (
                                 <p>Error fetching cashflow data: {error}</p>
