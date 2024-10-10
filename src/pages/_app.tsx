@@ -5,25 +5,17 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { createPagesBrowserClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { getEnvVars } from '@/lib/env';
 
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
-import { EnvProvider, useEnv } from '../components/wrappers/context/EnvContext';
 
 import '../styles/style.css';
 import '../styles/pages/signup.css';
 import '../styles/components/auth/oauth-login-button.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-    return (
-        <EnvProvider>
-            <AppContent Component={Component} pageProps={pageProps} />
-        </EnvProvider>
-    );
-}
-
-const AppContent = ({ Component, pageProps }: { Component: any; pageProps: any }) => {
-    const { supabaseUrl, supabaseAnonKey } = useEnv();
+    const { supabaseUrl, supabaseAnonKey } = getEnvVars();
 
     const [supabaseClient] = useState<SupabaseClient>(() =>
         createPagesBrowserClient({
@@ -47,6 +39,6 @@ const AppContent = ({ Component, pageProps }: { Component: any; pageProps: any }
             <Footer />
         </SessionContextProvider>
     );
-};
+}
 
 export default MyApp;
