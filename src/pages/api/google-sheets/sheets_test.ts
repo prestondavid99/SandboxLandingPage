@@ -69,7 +69,7 @@ export async function authorize(): Promise<OAuth2Client> {
  * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  * @param {OAuth2Client} auth The authenticated Google OAuth client.
  */
-export async function listMajors(auth: OAuth2Client): Promise<void> {
+export default async function listMajors(auth: OAuth2Client): Promise<void> {
     const sheets = google.sheets({ version: 'v4', auth });
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
