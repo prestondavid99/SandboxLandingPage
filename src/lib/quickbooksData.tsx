@@ -3,6 +3,11 @@ import { Row } from "@/types/types";
 const incomeKeywordList = ['deposit', 'invoice', 'sales receipt', 'payment', 'time charge', 'charge', 'billable expense charge']
 const expenseKeywordList = ['check', 'bill', 'expense', 'bill payment (check)', 'bill payment (credit card)', 'cash expense', 'credit card expense', 'refund', 'sales tax payment']
 
+// get the user-determined income and expense sources
+// TODO: enable user to CRUD their income and expense sources
+const incomeSources = ['Shopify (Net of Fees)', 'Paypal'];
+const expenseSources = ['Payroll', 'Credit Card', 'Contractor ACH', 'Inventory Transfer/Loan', 'Non-Profit Transfer', 'Sales Tax'];
+
 // find a specific row in a quickbooks data object based on the header
 export function findRowByHeader(row: Row, rowName: string): any | null {
     // Check if the current row contains colName
@@ -45,7 +50,7 @@ export function findRowByColData(rows: Row[], rowName: string): any[] {
 }
 
 // takes a list of transactions and returns an object with income, expense, and uncategorized transactions
-export function categorizeTransactions(rows: Row[]) {
+function categorizeTransactions(rows: Row[]) {
     const incomeList:  Row[] = [];
     const expenseList: Row[] = [];
     const uncategorizedList: Row[] = [];
@@ -84,7 +89,7 @@ export function categorizeTransactions(rows: Row[]) {
 }
 
 // takes a list of transactions and a list of categories and returns an object with categorized transactions
-export function subCategorizeTransactions(transactions: Row[], categories: string[]) {
+function subCategorizeTransactions(transactions: Row[], categories: string[]) {
     const categorized: { [category: string]: Row[] } = {};
     
     // Initialize categories
@@ -92,6 +97,7 @@ export function subCategorizeTransactions(transactions: Row[], categories: strin
         categorized[category] = [];
     });
 
+      // Ensure the "Other" category exists
     categorized["Other"] = [];
 
     transactions.forEach(transaction => {
@@ -112,4 +118,42 @@ export function subCategorizeTransactions(transactions: Row[], categories: strin
     });
 
     return categorized;
+}
+
+function calculateCategoryTotals(categorizedTransactions: any) {
+    const totals: any[] = [];
+    let idx = 0;
+
+    for (const category in categorizedTransactions) {
+        if (Array.isArray(categorizedTransactions[category])) {
+            const total = categorizedTransactions[category].reduce((sum: number, transaction: any) => {
+                const amount = parseFloat(transaction.ColData[8].value);
+                return sum + (isNaN(amount) ? 0 : amount);
+            }, 0);
+
+            totals[idx] = [category, total];
+            idx++;
+        }
+    }
+
+    return totals;
+}
+
+// manages the process for parsing raw transaction data into something usable
+export function parseTransactionData(transactions: Row[]) {
+    const incomeExpenseCategories = categorizeTransactions(transactions);
+
+    const incomeSubCategorized = subCategorizeTransactions(incomeExpenseCategories.income, incomeSources);
+    const expenseSubCategorized = subCategorizeTransactions(incomeExpenseCategories.expense, expenseSources);
+    console.log(incomeSubCategorized, expenseSubCategorized);
+
+    const incomeTotals = calculateCategoryTotals(incomeSubCategorized);
+    const expenseTotals = calculateCategoryTotals(expenseSubCategorized);
+
+    const data = [
+        ['income', incomeTotals],
+        ['expense', expenseTotals],
+    ];
+
+    return data;
 }

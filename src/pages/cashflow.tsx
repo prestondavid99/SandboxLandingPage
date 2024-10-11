@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import React from 'react';
-import { findRowByHeader, findRowByColData, categorizeTransactions, subCategorizeTransactions } from '@/lib/quickbooksData';
+import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksdata';
 import { Row } from "@/types/types";
 
 export default function Cashflow() {
@@ -26,11 +26,7 @@ export default function Cashflow() {
 
     // financial data extracted from quickbooks reports
     const [bankBalance, setBankBalance] = useState<number | null>(null);
-
-    // get the user-determined income and expense sources
-    // TODO: enable user to CRUD their income sources and expense sources
-    const incomeSources = ['Shopify (Net of Fees)', 'Paypal', 'Other Income'];
-    const expenseSources = ['Payroll', 'Credit Card', 'Contractor ACH', 'Inventory Transfer/Loan', 'Non-Profit Transfer', 'Sales Tax', 'Other Expense'];
+    const [transactionData, setTransactionData] = useState<any | null>(null);
 
     // check if the user belongs to a company
     useEffect(() => {
@@ -114,22 +110,12 @@ export default function Cashflow() {
         if (transactionList) {
             // console.log('##### transactionList #####');
             // console.log(transactionList);
-            const incomeRowList = findRowByColData(transactionList!.Rows.Row, 'income');
-            console.log(transactionList!.Rows.Row);
-            console.log('incomeRowList');
-            console.log(incomeRowList);
+            
+            const transactionData = parseTransactionData(transactionList!.Rows.Row);
 
-            const categorizedTransactions = categorizeTransactions(transactionList!.Rows.Row);
-            console.log('categorizedTransactions');
-            console.log(categorizedTransactions);
-
-            const incomeSubCategorized = subCategorizeTransactions(categorizedTransactions.income, incomeSources);
-            console.log('incomeSubCategorized');
-            console.log(incomeSubCategorized);
-
-            const expenseSubCategorized = subCategorizeTransactions(categorizedTransactions.expense, expenseSources);
-            console.log('expenseSubCategorized');
-            console.log(expenseSubCategorized);
+            setTransactionData(transactionData);
+            console.log('transactionData');
+            console.log(transactionData);
         }
     }, [transactionList]);
 
@@ -153,9 +139,9 @@ export default function Cashflow() {
                                     <h3>Income</h3>
                                     <ul>
                                     {
-                                        incomeSources.map((source) => {
+                                        transactionData[0][1].map((info: any) => {
                                             return (
-                                                <li>{source}: </li>
+                                                <li>{info[0]}: ${info[1]}</li>
                                             );
                                         })
                                     }
@@ -164,9 +150,9 @@ export default function Cashflow() {
                                     <h3>Expenses</h3>
                                     <ul>
                                     {
-                                        expenseSources.map((source) => {
+                                        transactionData[1][1].map((info: any) => {
                                             return (
-                                                <li>{source}: </li>
+                                                <li>{info[0]}: ${info[1]}</li>
                                             );
                                         })
                                     }
