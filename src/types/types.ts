@@ -21,9 +21,3 @@ export type Row = {
     Summary?: { ColData: ColData[] };
     type?: string;
 }
-
-export type BalanceSheetReport = {
-    Header: { [key: string]: any };
-    Columns: { Column: { [key: string]: any }[] };
-    Rows: { Row: Row[] };
-}

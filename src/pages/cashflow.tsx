@@ -4,13 +4,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import React from 'react';
-import { findRow } from '@/lib/quickbooksData';
-import { BalanceSheetReport, Row, ColData } from "@/types/types";
+import { findRowByHeader, findRowByColData, categorizeTransactions, subCategorizeTransactions } from '@/lib/quickbooksData';
+import { Row } from "@/types/types";
 
 export default function Cashflow() {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [error, setError] = useState<string | null>(null);
+    const today = new Date();
 
     // company info
     const [companyExists, setCompanyExists] = useState(false);
@@ -18,12 +19,18 @@ export default function Cashflow() {
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
 
     // quickbooks reports
-    const [cashflowReport, setCashflowReport] = useState(null);
-    const [transactionList, setTransactionList] = useState(null);
-    const [balanceSheetReport, setBalanceSheetReport] = useState<BalanceSheetReport | null>(null);
+    const [balanceSheetReport, setBalanceSheetReport] = useState<any | null>(null);
+    const [profitAndLossReport, setProfitAndLossReport] = useState<any | null>(null);
+    const [cashflowReport, setCashflowReport] = useState<any | null>(null);
+    const [transactionList, setTransactionList] = useState<any | null>(null);
 
     // financial data extracted from quickbooks reports
     const [bankBalance, setBankBalance] = useState<number | null>(null);
+
+    // get the user-determined income and expense sources
+    // TODO: enable user to CRUD their income sources and expense sources
+    const incomeSources = ['Shopify (Net of Fees)', 'Paypal', 'Other Income'];
+    const expenseSources = ['Payroll', 'Credit Card', 'Contractor ACH', 'Inventory Transfer/Loan', 'Non-Profit Transfer', 'Sales Tax', 'Other Expense'];
 
     // check if the user belongs to a company
     useEffect(() => {
@@ -65,9 +72,10 @@ export default function Cashflow() {
                         throw new Error('Failed to fetch cashflow data');
                     }
                     const data = await response.json();
+                    setProfitAndLossReport(data.profitAndLossReport);
+                    setBalanceSheetReport(data.balanceSheetReport);
                     setCashflowReport(data.cashFlowReport);
                     setTransactionList(data.transactionList);
-                    setBalanceSheetReport(data.balanceSheetReport);
                 } catch {
                     console.log("Error fetching cashflow data");
                 }
@@ -77,12 +85,18 @@ export default function Cashflow() {
     }, [companyExists, quickbooksCompanyId]);
 
     useEffect(() => {
+        // ensure profitAndLossReport is not null
+        if (profitAndLossReport) {
+            // console.log('##### profitAndLossReport #####');
+            // console.log(profitAndLossReport);
+        }
+    }, [profitAndLossReport]);
+
+    useEffect(() => {
         // ensure balanceSheetReport is not null
         if (balanceSheetReport) {
-            console.log('##### balanceSheetReport #####');
-            console.log(balanceSheetReport);
-
-            const baRow = findRow(balanceSheetReport!.Rows.Row[0], 'Bank Accounts');
+            // extract the data for our cashflow report
+            const baRow = findRowByHeader(balanceSheetReport!.Rows.Row[0], 'Bank Accounts');
             setBankBalance(baRow.Summary.ColData[1].value);
         }
     }, [balanceSheetReport]);
@@ -90,16 +104,32 @@ export default function Cashflow() {
     useEffect(() => {
         // ensure cashflowReport is not null
         if (cashflowReport) {
-            console.log('##### cashflowReport #####');
-            console.log(cashflowReport);
+            // console.log('##### cashflowReport #####');
+            // console.log(cashflowReport);
         }
     }, [cashflowReport]);
 
     useEffect(() => {
         // ensure transactionList is not null
         if (transactionList) {
-            console.log('##### transactionList #####');
-            console.log(transactionList);
+            // console.log('##### transactionList #####');
+            // console.log(transactionList);
+            const incomeRowList = findRowByColData(transactionList!.Rows.Row, 'income');
+            console.log(transactionList!.Rows.Row);
+            console.log('incomeRowList');
+            console.log(incomeRowList);
+
+            const categorizedTransactions = categorizeTransactions(transactionList!.Rows.Row);
+            console.log('categorizedTransactions');
+            console.log(categorizedTransactions);
+
+            const incomeSubCategorized = subCategorizeTransactions(categorizedTransactions.income, incomeSources);
+            console.log('incomeSubCategorized');
+            console.log(incomeSubCategorized);
+
+            const expenseSubCategorized = subCategorizeTransactions(categorizedTransactions.expense, expenseSources);
+            console.log('expenseSubCategorized');
+            console.log(expenseSubCategorized);
         }
     }, [transactionList]);
 
@@ -118,21 +148,28 @@ export default function Cashflow() {
                             {cashflowReport ? (
                                 <>
                                     <h2>Cashflow Report</h2>
+                                    <p>{today.toDateString()}</p>
 
-                                    <h3>Sources</h3>
+                                    <h3>Income</h3>
                                     <ul>
-                                        <li>Shopify (Net of Fees): </li>
-                                        <li>Paypal: </li>
+                                    {
+                                        incomeSources.map((source) => {
+                                            return (
+                                                <li>{source}: </li>
+                                            );
+                                        })
+                                    }
                                     </ul>
 
-                                    <h3>Uses</h3>
+                                    <h3>Expenses</h3>
                                     <ul>
-                                        <li>Payroll: </li>
-                                        <li>Credit Card: </li>
-                                        <li>Contractor ACH: </li>
-                                        <li>Inventory Transfer/Loan: </li>
-                                        <li>Non-Profit Transfer: </li>
-                                        <li>Sales Tax: </li>
+                                    {
+                                        expenseSources.map((source) => {
+                                            return (
+                                                <li>{source}: </li>
+                                            );
+                                        })
+                                    }
                                     </ul>
 
                                     <h3>Cash Balance</h3>
