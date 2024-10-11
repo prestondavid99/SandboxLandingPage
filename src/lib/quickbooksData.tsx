@@ -120,17 +120,23 @@ function subCategorizeTransactions(transactions: Row[], categories: string[]) {
     return categorized;
 }
 
+const roundTo = function(num: number, places: number) {
+    const factor = 10 ** places;
+    return Math.round(num * factor) / factor;
+};
+
 function calculateCategoryTotals(categorizedTransactions: any) {
     const totals: any[] = [];
     let idx = 0;
 
     for (const category in categorizedTransactions) {
         if (Array.isArray(categorizedTransactions[category])) {
-            const total = categorizedTransactions[category].reduce((sum: number, transaction: any) => {
+            let total = categorizedTransactions[category].reduce((sum: number, transaction: any) => {
                 const amount = parseFloat(transaction.ColData[8].value);
                 return sum + (isNaN(amount) ? 0 : amount);
             }, 0);
 
+            total = roundTo(total, 2);
             totals[idx] = [category, total];
             idx++;
         }
