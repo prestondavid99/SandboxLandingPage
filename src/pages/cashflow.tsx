@@ -1,26 +1,34 @@
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
-import { useEnv } from '../components/wrappers/context/EnvContext';
+import React from 'react';
+import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksData';
+import { Row } from "@/types/types";
 
-export default function Profile() {
+export default function Cashflow() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { quickbooksAccountingApi } = useEnv();
+    const [error, setError] = useState<string | null>(null);
+    const today = new Date();
 
+    // company info
     const [companyExists, setCompanyExists] = useState(false);
     const [companyName, setCompanyName] = useState('');
     const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
 
-    const [cashflowData, setCashflowData] = useState(null);
-    const [error, setError] = useState(null);
+    // quickbooks reports
+    const [balanceSheetReport, setBalanceSheetReport] = useState<any | null>(null);
+    const [profitAndLossReport, setProfitAndLossReport] = useState<any | null>(null);
+    const [cashflowReport, setCashflowReport] = useState<any | null>(null);
+    const [transactionList, setTransactionList] = useState<any | null>(null);
 
-    // quickbooks endpoint for the cashflow report
-    const qb_cashflow_report_endpoint = `${quickbooksAccountingApi}/v3/company/${quickbooksCompanyId}/reports/CashFlow`;
+    // financial data extracted from quickbooks reports
+    const [bankBalance, setBankBalance] = useState<number | null>(null);
+    const [transactionData, setTransactionData] = useState<any | null>(null);
 
+    // check if the user belongs to a company
     useEffect(() => {
         const checkCompany = async () => {
             if (session) {
@@ -50,29 +58,48 @@ export default function Profile() {
         checkCompany();
     }, [session, supabase]);
 
+    // Fetch financial data when the company is found
     useEffect(() => {
-        const fetchCashflowReport = async () => {
-            if (quickbooksCompanyId) {
+        const fetchCashflowData = async () => {
+            if (companyExists && quickbooksCompanyId) {
                 try {
-                    const accessToken = 'TODO: YOUR_QUICKBOOKS_ACCESS_TOKEN'; // Replace with actual token
-                    const response = await axios.get(qb_cashflow_report_endpoint, {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    setCashflowData(response.data);
-                } catch (err: any) {
-                    setError(err.message);
+                    const response = await fetch(`/api/quickbooks/reports?qbCompanyId=${quickbooksCompanyId}`);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch cashflow data');
+                    }
+                    const data = await response.json();
+                    setProfitAndLossReport(data.profitAndLossReport);
+                    setBalanceSheetReport(data.balanceSheetReport);
+                    setCashflowReport(data.cashFlowReport);
+                    setTransactionList(data.transactionList);
+                } catch {
+                    console.log("Error fetching cashflow data");
                 }
             }
         };
+        fetchCashflowData();
+    }, [companyExists, quickbooksCompanyId]);
 
-        if (quickbooksCompanyId) {
-            fetchCashflowReport();
+    // extract the bank balance from the balance sheet report
+    useEffect(() => {
+        // ensure balanceSheetReport is not null
+        if (balanceSheetReport) {
+            // extract the data for our cashflow report
+            const baRow = findRowByHeader(balanceSheetReport!.Rows.Row[0], 'Bank Accounts');
+            setBankBalance(baRow.Summary.ColData[1].value);
         }
-    }, [quickbooksCompanyId, qb_cashflow_report_endpoint]);
+    }, [balanceSheetReport]);
+
+    // extract the transaction data from the transaction list
+    useEffect(() => {
+        // ensure transactionList is not null
+        if (transactionList && transactionList != undefined) {
+            const transactionData = parseTransactionData(transactionList!.Rows.Row);
+            setTransactionData(transactionData);
+            console.log('transactionData');
+            console.log(transactionData);
+        }
+    }, [transactionList]);
 
     return (
         <>
@@ -86,8 +113,42 @@ export default function Profile() {
                     {companyExists ? (
                         <>
                             <h1>{companyName}'s Cashflow Dashboard</h1>
-                            {cashflowData ? (
-                                <pre>{JSON.stringify(cashflowData, null, 2)}</pre>
+                            {cashflowReport ? (
+                                <>
+                                    <h2>Cashflow Report</h2>
+                                    <p>{today.toDateString()}</p>
+
+                                    <h3>Income</h3>
+                                    <ul>
+                                    { transactionData ? (
+                                        transactionData[0][1].map((info: any) => {
+                                            return (
+                                                <li>{info[0]}: ${info[1]}</li>
+                                            );
+                                        })
+                                    ) : (
+                                        <></>
+                                    )}
+                                    </ul>
+
+                                    <h3>Expenses</h3>
+                                    <ul>
+                                    { transactionData ? (
+                                        transactionData[1][1].map((info: any) => {
+                                            return (
+                                                <li>{info[0]}: ${info[1]}</li>
+                                            );
+                                        })
+                                    ) : (
+                                        <></>
+                                    )}
+                                    </ul>
+
+                                    <h3>Cash Balance</h3>
+                                    <ul>
+                                        <li>Total Bank Balance: ${bankBalance}</li>
+                                    </ul>
+                                </>
                             ) : error ? (
                                 <p>Error fetching cashflow data: {error}</p>
                             ) : (
