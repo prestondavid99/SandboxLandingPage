@@ -55,37 +55,40 @@ function categorizeTransactions(rows: Row[]) {
     const expenseList: Row[] = [];
     const uncategorizedList: Row[] = [];
 
-    rows.forEach((row) => {
-        const type = row.ColData![1].value.toLowerCase();
-        const amount = parseFloat(row.ColData![8].value);
-
-        // Income categories
-        if (incomeKeywordList.includes(type)) {
-            incomeList.push(row);
-        }
-
-        // Expense categories
-        else if (expenseKeywordList.includes(type)) {
-            expenseList.push(row);
-        }
-
-        // Handle special cases
-        else if (type === 'inventory qty adjust') {
-            amount > 0 ? incomeList.push(row) : expenseList.push(row);
-        }
-
-        else {
-            uncategorizedList.push(row);
-        }
-    });
-
-    return { 
-        income: incomeList, 
-        expense: expenseList, 
-        uncategorized: uncategorizedList
-    };
-
-
+    try {
+        rows.forEach((row) => {
+            const type = row.ColData![1].value.toLowerCase();
+            const amount = parseFloat(row.ColData![8].value);
+    
+            // Income categories
+            if (incomeKeywordList.includes(type)) {
+                incomeList.push(row);
+            }
+    
+            // Expense categories
+            else if (expenseKeywordList.includes(type)) {
+                expenseList.push(row);
+            }
+    
+            // Handle special cases
+            else if (type === 'inventory qty adjust') {
+                amount > 0 ? incomeList.push(row) : expenseList.push(row);
+            }
+    
+            else {
+                uncategorizedList.push(row);
+            }
+        });
+    
+        return { 
+            income: incomeList, 
+            expense: expenseList, 
+            uncategorized: uncategorizedList
+        };
+    } catch (error) {
+        console.error(error);
+        return { income: [], expense: [], uncategorized: [] };
+    }
 }
 
 // takes a list of transactions and a list of categories and returns an object with categorized transactions
@@ -151,7 +154,6 @@ export function parseTransactionData(transactions: Row[]) {
 
     const incomeSubCategorized = subCategorizeTransactions(incomeExpenseCategories.income, incomeSources);
     const expenseSubCategorized = subCategorizeTransactions(incomeExpenseCategories.expense, expenseSources);
-    console.log(incomeSubCategorized, expenseSubCategorized);
 
     const incomeTotals = calculateCategoryTotals(incomeSubCategorized);
     const expenseTotals = calculateCategoryTotals(expenseSubCategorized);

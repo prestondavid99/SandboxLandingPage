@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import React from 'react';
-import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksdata';
+import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksData';
 import { Row } from "@/types/types";
 
 export default function Cashflow() {
@@ -80,14 +80,7 @@ export default function Cashflow() {
         fetchCashflowData();
     }, [companyExists, quickbooksCompanyId]);
 
-    useEffect(() => {
-        // ensure profitAndLossReport is not null
-        if (profitAndLossReport) {
-            // console.log('##### profitAndLossReport #####');
-            // console.log(profitAndLossReport);
-        }
-    }, [profitAndLossReport]);
-
+    // extract the bank balance from the balance sheet report
     useEffect(() => {
         // ensure balanceSheetReport is not null
         if (balanceSheetReport) {
@@ -97,22 +90,11 @@ export default function Cashflow() {
         }
     }, [balanceSheetReport]);
 
-    useEffect(() => {
-        // ensure cashflowReport is not null
-        if (cashflowReport) {
-            // console.log('##### cashflowReport #####');
-            // console.log(cashflowReport);
-        }
-    }, [cashflowReport]);
-
+    // extract the transaction data from the transaction list
     useEffect(() => {
         // ensure transactionList is not null
-        if (transactionList) {
-            // console.log('##### transactionList #####');
-            // console.log(transactionList);
-            
+        if (transactionList && transactionList != undefined) {
             const transactionData = parseTransactionData(transactionList!.Rows.Row);
-
             setTransactionData(transactionData);
             console.log('transactionData');
             console.log(transactionData);
@@ -138,24 +120,28 @@ export default function Cashflow() {
 
                                     <h3>Income</h3>
                                     <ul>
-                                    {
+                                    { transactionData ? (
                                         transactionData[0][1].map((info: any) => {
                                             return (
                                                 <li>{info[0]}: ${info[1]}</li>
                                             );
                                         })
-                                    }
+                                    ) : (
+                                        <></>
+                                    )}
                                     </ul>
 
                                     <h3>Expenses</h3>
                                     <ul>
-                                    {
+                                    { transactionData ? (
                                         transactionData[1][1].map((info: any) => {
                                             return (
                                                 <li>{info[0]}: ${info[1]}</li>
                                             );
                                         })
-                                    }
+                                    ) : (
+                                        <></>
+                                    )}
                                     </ul>
 
                                     <h3>Cash Balance</h3>

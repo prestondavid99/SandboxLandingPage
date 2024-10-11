@@ -57,8 +57,7 @@ export async function getBalanceSheetReport(qbCompanyId: string) {
 
 // get the cashflow report from quickbooks
 export async function getCashFlowReport(qbCompanyId: string) {
-    // TODO: change start_date back to formattedDate
-    const qbCashflowReportUrl = `${quickbooksAccountingApi}/v3/company/${qbCompanyId}/reports/CashFlow?start_date=2024-01-01&end_date=${formattedDate}`;
+    const qbCashflowReportUrl = `${quickbooksAccountingApi}/v3/company/${qbCompanyId}/reports/CashFlow?start_date=${formattedDate}&end_date=${formattedDate}`;
     
     try {
         // Refresh the QuickBooks token if necessary
@@ -81,8 +80,7 @@ export async function getCashFlowReport(qbCompanyId: string) {
 
 // get the transaction list from quickbooks
 export async function getTransactionList(qbCompanyId: string) {
-    // TODO: change start_date back to formattedDate 
-    const qbTransactionListUrl = `${quickbooksAccountingApi}/v3/company/${qbCompanyId}/reports/TransactionList?start_date=2024-01-01&end_date=${formattedDate}`;
+    const qbTransactionListUrl = `${quickbooksAccountingApi}/v3/company/${qbCompanyId}/reports/TransactionList?start_date=${formattedDate}&end_date=${formattedDate}`;
     
     try {
         // Refresh the QuickBooks token if necessary
