@@ -1,11 +1,10 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import listMajors, { authorize } from "@/pages/api/google-sheets/sheets_test";
 
 const handleClick = async () => {
     try {
         // Authorize the user
-        const authClient = await authorize();
+        // const authClient = await authorize();
 
         // Call your API or function using the authorized client
         // await listMajors(authClient); // Uncomment if you want to call directly

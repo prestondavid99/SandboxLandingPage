@@ -20,6 +20,7 @@ function OAuthLoginButton({ provider, logo, buttonText }: OAuthLoginButtonProps)
         await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
+                scopes: 'https://www.googleapis.com/auth/spreadsheets',
                 redirectTo: `${baseUrl}/profile` // redirect to profile page after login
             },
         });

@@ -19,6 +19,7 @@
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.7.7",
     "depcheck": "^1.4.7",
+    "google-auth-library": "^9.14.2",
     "googleapis": "^105.0.0",
     "intuit-oauth": "^4.1.2",
     "next": "14.2.13",
