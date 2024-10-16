@@ -1,4 +1,5 @@
 import { Row } from "@/types/types";
+import jp from 'jsonpath';
 
 const incomeKeywordList = ['deposit', 'invoice', 'sales receipt', 'payment', 'time charge', 'charge', 'billable expense charge']
 const expenseKeywordList = ['check', 'bill', 'expense', 'bill payment (check)', 'bill payment (credit card)', 'cash expense', 'credit card expense', 'refund', 'sales tax payment']
@@ -9,21 +10,16 @@ const incomeSources = ['Shopify (Net of Fees)', 'Paypal'];
 const expenseSources = ['Payroll', 'Credit Card', 'Contractor ACH', 'Inventory Transfer/Loan', 'Non-Profit Transfer', 'Sales Tax'];
 
 // find a specific row in a quickbooks data object based on the header
-export function findRowByHeader(row: Row, rowName: string): any | null {
-    // Check if the current row contains colName
-    if (row.Header && row.Header.ColData.some(col => col.value === rowName)) {
-        // If found, return the row
-        return row;
+export function findRowByHeader(data: any, rowName: string): any | null {
+    // Use JSONPath to search for the row with the specified header
+    const result = jp.query(data, `$..Row[?(@.Header.ColData[*].value === "${rowName}")]`);
+
+    // If a matching row is found, return the first result
+    if (result.length > 0) {
+        return result[0];
     }
 
-    // Recursively search through nested rows
-    if (row.Rows) {
-        for (const nestedRow of row.Rows.Row) {
-            const result = findRowByHeader(nestedRow, rowName);
-            if (result) return result;
-        }
-    }
-
+    // If no matching row is found, return null
     return null;
 }
 
