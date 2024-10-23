@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { createPagesBrowserClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { wrapper } from '../store';
 import { getEnvVars } from '@/lib/env';
 
 import Navbar from '../components/layout/Navbar';
@@ -41,4 +42,4 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);
