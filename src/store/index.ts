@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
-import exampleReducer from './slices/exampleSlice';
+import bankingSlice from './slices/bankingSlice';
+import settingsSlice from './slices/settingsSlice';
 
 const makeStore = () =>
     configureStore({
         reducer: {
-            example: exampleReducer,
+            settings: settingsSlice,
+            banking: bankingSlice,
         },
     });
 
