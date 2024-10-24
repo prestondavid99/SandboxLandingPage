@@ -12,9 +12,9 @@ export interface IPeriod {
 }
 
 
-// ###############################
-// ### Cash Position Interface ###
-// ###############################
+// #############################
+// ##### Banking Interface #####
+// #############################
 
 export interface IBank {
     id: number;                             // ID of the bank
