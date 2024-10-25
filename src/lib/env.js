@@ -1,13 +1,13 @@
 // lib/env.js
 // This file allows us to centralize environment variables
-// We can use this both in frontend (through context/EnvContext) and backend (calling getEnvVars directly)
+// We can use this both in frontend and backend (by calling getEnvVars directly)
 
 export const getEnvVars = () => {
     const isProduction = process.env.NEXT_PUBLIC_ENVIRONMENT === 'production';
 
     return {
         // General
-        isProduction: process.env.NEXT_PUBLIC_ENVIRONMENT === 'production',
+        isProduction: isProduction,
         
         baseUrl: isProduction
             ? process.env.NEXT_PUBLIC_BASE_URL_PROD
@@ -42,5 +42,22 @@ export const getEnvVars = () => {
         quickbooksPaymentsApi: isProduction
             ? process.env.QUICKBOOKS_PAYMENTS_API_PROD
             : process.env.QUICKBOOKS_PAYMENTS_API_DEV,
+
+        // Plaid
+        plaidEnvironment: isProduction
+            ? process.env.PLAID_ENVIRONMENT_PROD
+            : process.env.PLAID_ENVIRONMENT_DEV,
+
+        plaidClientId: isProduction
+            ? process.env.PLAID_CLIENT_ID_PROD
+            : process.env.PLAID_CLIENT_ID_DEV,
+
+        plaidSecretKey: isProduction
+            ? process.env.PLAID_SECRET_KEY_PROD
+            : process.env.PLAID_SECRET_KEY_DEV,
+
+        plaidEndpoint: isProduction
+            ? process.env.PLAID_ENDPOINT_PROD
+            : process.env.PLAID_ENDPOINT_DEV,
     };
 };

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import PLink from '@/components/plaid/PLink';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
@@ -117,6 +118,7 @@ export default function Profile() {
             {session ? (
                 <>
                     <h1>{session.user.user_metadata.full_name}'s Profile</h1>
+                    <PLink />
 
                     {companyExists ? (
                         <>

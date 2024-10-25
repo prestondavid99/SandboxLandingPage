@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { createPagesBrowserClient, SupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { wrapper } from '../store';
+import { Provider } from 'react-redux';
 import { getEnvVars } from '@/lib/env';
 
 import Navbar from '../components/layout/Navbar';
@@ -15,7 +16,8 @@ import '../styles/style.css';
 import '../styles/pages/signup.css';
 import '../styles/components/auth/oauth-login-button.css'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, ...rest }: AppProps) {
+    const { store, props } = wrapper.useWrappedStore(rest);
     const { supabaseUrl, supabaseAnonKey } = getEnvVars();
 
     const [supabaseClient] = useState<SupabaseClient>(() =>
@@ -26,20 +28,22 @@ function MyApp({ Component, pageProps }: AppProps) {
     );
 
     return (
-        <SessionContextProvider
-            supabaseClient={supabaseClient}
-            initialSession={pageProps.initialSession}
-        >
-            <Head>
-                <meta name="viewport" content="initial-scale=1, width=device-width" />
-            </Head>
-            <Navbar />
-            <main>
-                <Component {...pageProps} />
-            </main>
-            <Footer />
-        </SessionContextProvider>
+        <Provider store={store}>
+            <SessionContextProvider
+                supabaseClient={supabaseClient}
+                initialSession={pageProps.initialSession}
+            >
+                <Head>
+                    <meta name="viewport" content="initial-scale=1, width=device-width" />
+                </Head>
+                <Navbar />
+                <main>
+                    <Component {...pageProps} />
+                </main>
+                <Footer />
+            </SessionContextProvider>
+        </Provider>
     );
 }
 
-export default wrapper.withRedux(MyApp);
+export default MyApp;
