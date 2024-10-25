@@ -22,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             }
 
             const userId = user.id;
-            console.log('User ID:', userId);
 
             // Create the link token using Plaid API
             const response = await axios.post(`${plaidEndpoint}/link/token/create`, {

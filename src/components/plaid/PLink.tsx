@@ -1,13 +1,9 @@
 import React, { Component } from "react";
 import { PlaidLink } from "react-plaid-link";
 import axios from "axios";
-import { getEnvVars } from "@/lib/env";
 import { supabase } from '@/lib/supabaseClient';
 
-const { plaidEnvironment } = getEnvVars();
-
 type PLinkState = {
-  transactions: any[];
   linkToken: string;
 };
 
@@ -16,11 +12,8 @@ class PLink extends Component<{}, PLinkState> {
     super(props);
 
     this.state = {
-      transactions: [],
-      linkToken: "", // To store the link_token
+      linkToken: "",
     };
-
-    this.handleClick = this.handleClick.bind(this);
   }
 
   async componentDidMount() {
@@ -42,19 +35,13 @@ class PLink extends Component<{}, PLinkState> {
   }
 
   handleOnSuccess(public_token: any, metadata: any) {
-    axios.post("/auth/public_token", {
+    axios.post("/api/plaid/callback", {
       public_token: public_token
     });
   }
 
   handleOnExit() {
-    // handle the case when your user exits Link
-  }
-
-  handleClick(res: any) {
-    axios.get("/transactions").then(res => {
-      this.setState({ transactions: res.data });
-    });
+    // handle the case when your user exits PlaidLink
   }
 
   render() {
@@ -72,9 +59,6 @@ class PLink extends Component<{}, PLinkState> {
         ) : (
           <p>Loading...</p>
         )}
-        {/* <div>
-          <button onClick={this.handleClick}>Get Transactions</button>
-        </div> */}
       </div>
     );
   }
