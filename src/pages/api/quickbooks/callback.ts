@@ -18,7 +18,6 @@ const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, state, realmId } = req.query;
-    const company_Id = 0;
 
     if (!code) {
         return res.status(400).json({ error: 'Authorization code is missing' });
@@ -28,6 +27,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const response = await oauthClient.createToken(`${baseUrl}/api/quickbooks/callback?code=${code}`);
         const { access_token, refresh_token, expires_in } = response.token;
         const expire_datetime = new Date(Date.now() + expires_in * 1000);
+
+        const { data } = await supabase
+            .from('provider_company')
+            .select('company_id')
+            .eq('provider_company_id', realmId)
+            .single();
+        
+        if (!data) {
+            return res.status(400).json({ error: 'Company not found' });
+        }
+
+        const company_Id = data.company_id;
 
         // Check for existing Access token record
         const { data: existingAccessToken } = await supabase
