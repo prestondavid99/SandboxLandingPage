@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
 import useCompanyExists from '@/lib/hooks/useCompanyExists';
 import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
+import { apiProviderKey } from '@/constants/config';
 
 export default function Profile() {
     const session = useSession();
@@ -35,8 +36,7 @@ export default function Profile() {
 
         const { data, error } = await supabase
             .from('company')
-            .insert([{ 
-                quickbooks_company_id: quickbooksCompanyIdInput,
+            .insert([{
                 name: companyNameInput
             }])
             .select('id');
@@ -47,6 +47,10 @@ export default function Profile() {
                 .from('user_company')
                 .insert([{ user_id: session?.user.id, company_id: newCompanyId }]);
                 setNewCompanyId(newCompanyId);
+
+            await supabase
+                .from ('provider_company')
+                .insert([{ provider_id: apiProviderKey['quickbooks'], company_id: newCompanyId, provider_company_id: quickbooksCompanyIdInput }]);
         } else {
             console.error('Error creating company:', error);
         }
@@ -61,14 +65,18 @@ export default function Profile() {
         const { data, error } = await supabase
             .from('company')
             .update({
-                name: companyNameInput,
-                quickbooks_company_id: quickbooksCompanyIdInput
+                name: companyNameInput
             })
             .eq('id', companyId)
             .select('id');
 
         if (data) {
-            console.log('Company updated successfully:', data);
+            await supabase
+                .from ('provider_company')
+                .update({ provider_company_id: quickbooksCompanyIdInput })
+                .eq('provider_id', apiProviderKey['quickbooks'])
+                .eq('company_id', companyId);
+
             setIsEditing(false); // Exit edit mode after update
         } else {
             console.error('Error updating company:', error);
@@ -96,7 +104,7 @@ export default function Profile() {
                                         variant="outlined"
                                         fullWidth
                                         margin="normal"
-                                        value={companyNameInput}
+                                        defaultValue={companyName}
                                         onChange={(e) => setCompanyNameInput(e.target.value)}
                                     />
                                     <TextField
@@ -104,7 +112,7 @@ export default function Profile() {
                                         variant="outlined"
                                         fullWidth
                                         margin="normal"
-                                        value={quickbooksCompanyIdInput}
+                                        defaultValue={quickbooksCompanyId}
                                         onChange={(e) => setQuickbooksCompanyIdInput(e.target.value)}
                                     />
                                     <Button
