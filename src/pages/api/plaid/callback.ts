@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { getEnvVars } from '@/lib/env';
+import { supabase } from '@/lib/supabaseClient';
+import { apiProviderKey } from '@/constants/config';
+import { getCompanyData } from '@/lib/dbCache';
 
 const { plaidClientId, plaidSecretKey, plaidEndpoint } = getEnvVars();
 
@@ -15,6 +18,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 secret: plaidSecretKey,
                 public_token,
             });
+
+            const access_token = response.data.access_token;
+            const company_id = getCompanyData();
+
+            // Insert new Access token
+            const { data, error } = await supabase
+                .from('api_token')
+                .insert({
+                    token: access_token,
+                    type: 'Access',
+                    // expiration_datetime: expire_datetime,
+                    company_id: company_id,
+                    provider_id: apiProviderKey['plaid'],
+                });
+
+            console.log('Insert Data:', data);
+            console.log('Insert Error:', error);
 
             // Return the access token to the client
             res.status(200).json({ access_token: response.data.access_token });

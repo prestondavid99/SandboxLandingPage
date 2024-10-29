@@ -38,14 +38,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(400).json({ error: 'Company not found' });
         }
 
-        const company_Id = data.company_id;
+        const company_id = data.company_id;
 
         // Check for existing Access token record
         const { data: existingAccessToken } = await supabase
             .from('api_token')
             .select('*')
             .eq('type', 'Access')
-            .eq('company_id', company_Id)
+            .eq('company_id', company_id)
             .eq('provider_id', apiProviderKey['quickbooks'])
             .single();
 
@@ -63,7 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     token: access_token,
                     type: 'Access',
                     expiration_datetime: expire_datetime,
-                    company_id: company_Id,
+                    company_id: company_id,
                     provider_id: apiProviderKey['quickbooks'],
                 });
 
@@ -76,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .from('api_token')
             .select('*')
             .eq('type', 'Refresh')
-            .eq('company_id', company_Id)
+            .eq('company_id', company_id)
             .eq('provider_id', apiProviderKey['quickbooks'])
             .single();
 
@@ -94,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     token: refresh_token,
                     type: 'Refresh',
                     expiration_datetime: expire_datetime,
-                    company_id: company_Id,
+                    company_id: company_id,
                     provider_id: apiProviderKey['quickbooks'],
                 });
         }
