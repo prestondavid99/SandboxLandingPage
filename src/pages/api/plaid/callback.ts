@@ -1,13 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { getEnvVars } from '@/lib/env';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@supabase/supabase-js';
 import { apiProviderKey } from '@/constants/config';
-import { getCompanyData } from '@/lib/dbCache';
+import { HandlerContext, withSession } from '@/lib/withSession';
 
 const { plaidClientId, plaidSecretKey, plaidEndpoint } = getEnvVars();
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const { supabaseUrl, supabaseAnonKey } = getEnvVars();
+const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+
+const handler = async (req: NextApiRequest, res: NextApiResponse, context: HandlerContext) => {
     if (req.method === 'POST') {
         const { public_token } = req.body;
 
@@ -20,7 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             const access_token = response.data.access_token;
-            const company_id = getCompanyData();
+            const { user, company } = context;
+            const company_id = company.id;
+            // const company_id = 1;
 
             // Insert new Access token
             const { data, error } = await supabase
@@ -49,4 +54,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-export default handler;
+export default withSession(handler);

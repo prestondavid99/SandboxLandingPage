@@ -36,13 +36,13 @@ export const refreshQuickBooksToken = async (qbCompanyId: string) => {
         return;
     }
 
-    const company_Id = data.company_id;
+    const company_id = data.company_id;
 
     // Fetch the Access and Refresh tokens and their expiration time from the `api_token` table
     const { data: accessData, error: accessError } = await supabase
         .from('api_token')
         .select('token, expiration_datetime')
-        .eq('company_id', company_Id)
+        .eq('company_id', company_id)
         .eq('provider_id', apiProviderKey['quickbooks'])
         .eq('type', 'Access')
         .single();
@@ -50,7 +50,7 @@ export const refreshQuickBooksToken = async (qbCompanyId: string) => {
     const { data: refreshData, error: refreshError } = await supabase
         .from('api_token')
         .select('token')
-        .eq('company_id', company_Id)
+        .eq('company_id', company_id)
         .eq('provider_id', apiProviderKey['quickbooks'])
         .eq('type', 'Refresh')
         .single();
@@ -79,7 +79,7 @@ export const refreshQuickBooksToken = async (qbCompanyId: string) => {
                     token: access_token,
                     expiration_datetime: newExpiration,
                 })
-                .eq('company_id', company_Id)
+                .eq('company_id', company_id)
                 .eq('provider_id', apiProviderKey['quickbooks'])
                 .eq('type', 'Access');
 
@@ -88,7 +88,7 @@ export const refreshQuickBooksToken = async (qbCompanyId: string) => {
                 .update({
                     token: refresh_token,
                 })
-                .eq('company_id', company_Id)
+                .eq('company_id', company_id)
                 .eq('provider_id', apiProviderKey['quickbooks'])
                 .eq('type', 'Refresh');
 

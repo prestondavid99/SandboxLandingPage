@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getEnvVars } from '@/lib/env';
-import { createClient } from '@supabase/supabase-js';
 import { apiProviderKey } from '@/constants/config';
+import { createClient } from '@supabase/supabase-js';
+
+const { supabaseUrl, supabaseAnonKey } = getEnvVars();
+const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
 const OAuthClient = require('intuit-oauth');
 const { baseUrl, quickbooksClientId, quickbooksSecretKey, quickbooksEnvironment } = getEnvVars();
@@ -12,9 +15,6 @@ const config = {
     redirectUri: `${baseUrl}/api/quickbooks/callback`,
 };
 const oauthClient = new OAuthClient(config);
-
-const { supabaseUrl, supabaseAnonKey } = getEnvVars();
-const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, state, realmId } = req.query;
@@ -28,17 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { access_token, refresh_token, expires_in } = response.token;
         const expire_datetime = new Date(Date.now() + expires_in * 1000);
 
-        const { data } = await supabase
-            .from('provider_company')
-            .select('company_id')
-            .eq('provider_company_id', realmId)
-            .single();
-        
-        if (!data) {
-            return res.status(400).json({ error: 'Company not found' });
-        }
-
-        const company_id = data.company_id;
+        const company_id = Number(req.headers['company_id']);
 
         // Check for existing Access token record
         const { data: existingAccessToken } = await supabase
@@ -67,8 +57,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     provider_id: apiProviderKey['quickbooks'],
                 });
 
-            console.log('Insert Data:', data);
-            console.log('Insert Error:', error);
+
+            if (error) {
+                console.error('Error inserting access token:', error);
+                return;
+            }
         }
 
         // Check for existing Refresh token record
