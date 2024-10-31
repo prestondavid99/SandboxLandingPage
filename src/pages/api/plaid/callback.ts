@@ -3,14 +3,14 @@ import axios from 'axios';
 import { getEnvVars } from '@/lib/env';
 import { createClient } from '@supabase/supabase-js';
 import { apiProviderKey } from '@/constants/config';
-import { HandlerContext, withSession } from '@/lib/withSession';
+// import { HandlerContext, withSession } from '@/lib/withSession';
 
 const { plaidClientId, plaidSecretKey, plaidEndpoint } = getEnvVars();
 
 const { supabaseUrl, supabaseAnonKey } = getEnvVars();
 const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
 
-const handler = async (req: NextApiRequest, res: NextApiResponse, context: HandlerContext) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const { public_token } = req.body;
 
@@ -23,9 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: Handl
             });
 
             const access_token = response.data.access_token;
-            const { user, company } = context;
-            const company_id = company.id;
-            // const company_id = 1;
+            const company_id = Number(req.headers['company_id']);
 
             // Insert new Access token
             const { data, error } = await supabase
@@ -39,7 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: Handl
                 });
 
             console.log('Insert Data:', data);
-            console.log('Insert Error:', error);
+            console.error('Insert Error:', error);
 
             // Return the access token to the client
             res.status(200).json({ access_token: response.data.access_token });
@@ -54,4 +52,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse, context: Handl
     }
 };
 
-export default withSession(handler);
+export default handler;
