@@ -3,7 +3,6 @@ import axios from 'axios';
 import { getEnvVars } from '@/lib/env';
 import { createClient } from '@supabase/supabase-js';
 import { apiProviderKey } from '@/constants/config';
-// import { HandlerContext, withSession } from '@/lib/withSession';
 
 const { plaidClientId, plaidSecretKey, plaidEndpoint } = getEnvVars();
 

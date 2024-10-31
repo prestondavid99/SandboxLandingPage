@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 import { getEnvVars } from '@/lib/env';
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@/lib/supabase/supabaseServer';
 
 const { plaidClientId, plaidSecretKey, plaidEndpoint, plaidEnvironment } = getEnvVars();
 
@@ -9,6 +9,8 @@ const { plaidClientId, plaidSecretKey, plaidEndpoint, plaidEnvironment } = getEn
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         try {
+            const supabase = await createClient();
+
             // Check for the Supabase access token in the Authorization header
             const token = req.headers.authorization?.split(' ')[1]; // Bearer token
             if (!token) {

@@ -11,12 +11,12 @@ import { getEnvVars } from '@/lib/env';
 import { fetchUserCompany } from '@/store/slices/companySlice';
 import { AppDispatch } from '@/store';
 
-import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
-import '../styles/style.css';
-import '../styles/pages/signup.css';
-import '../styles/components/auth/oauth-login-button.css';
+import '@/styles/style.css';
+import '@/styles/pages/signup.css';
+import '@/styles/components/auth/oauth-login-button.css';
 
 function AppContent({ Component, pageProps, router }: AppProps) { // Add router prop
     const { session } = useSessionContext();
@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps, router }: AppProps) { // Include router h
                 <Head>
                     <meta name="viewport" content="initial-scale=1, width=device-width" />
                 </Head>
-                <AppContent Component={Component} pageProps={pageProps} router={router} /> {/* Pass router */}
+                <AppContent Component={Component} pageProps={pageProps} router={router} />
             </SessionContextProvider>
         </Provider>
     );

@@ -1,7 +1,7 @@
 // hooks/useQuickBooksConnection.ts
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase/supabaseClient';
 import { apiProviderKey } from '@/constants/config';
 
 const useQuickBooksConnection = (session: any, companyId: string | null) => {

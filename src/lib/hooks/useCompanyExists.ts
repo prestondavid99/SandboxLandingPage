@@ -1,7 +1,7 @@
 // hooks/useCompanyExists.ts
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase/supabaseClient';
 
 const useCompanyExists = (session: any) => {
     const [companyExists, setCompanyExists] = useState<boolean>(false);

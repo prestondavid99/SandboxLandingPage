@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Session, User } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import PLink from '@/components/plaid/PLink';
@@ -9,10 +9,38 @@ import Snackbar from '@mui/material/Snackbar';
 import useCompanyExists from '@/lib/hooks/useCompanyExists';
 import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
 import { apiProviderKey } from '@/constants/config';
+import { createClient } from '@/lib/supabase/supabaseClient';
 
 export default function Profile() {
-    const session = useSession();
-    const supabase = useSupabaseClient();
+    const supabase = createClient();
+
+    const [session, setSession] = useState<Session | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchSessionAndUser = async () => {
+            const supabase = createClient();
+
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+            if (sessionError) {
+                console.error('Error fetching session:', sessionError.message);
+            } else {
+                setSession(session);
+            }
+
+            if (userError) {
+                console.error('Error fetching user:', userError.message);
+            } else {
+                setUser(user);
+            }
+        };
+
+        fetchSessionAndUser();
+        console.log('session:', session);
+        console.log('user:', user);
+    }, []);
     
     // Using the custom hook
     const { companyExists, companyName, companyId } = useCompanyExists(session);
@@ -89,9 +117,9 @@ export default function Profile() {
                 <title>Profile Information</title>
                 <meta name="description" content="View and edit your profile information" />
             </Head>
-            {session ? (
+            {user ? (
                 <>
-                    <h1>{session.user.user_metadata.full_name}'s Profile</h1>
+                    <h1>{user.email}'s Profile</h1>
                     <PLink />
 
                     {companyExists ? (

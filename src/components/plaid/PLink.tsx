@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { PlaidLink } from "react-plaid-link";
 import axios from "axios";
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabase/supabaseClient';
 
 type PLinkState = {
   linkToken: string;

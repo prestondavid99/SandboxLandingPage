@@ -1,7 +1,7 @@
 // store/slices/companySlice.ts
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { supabase } from '@/lib/supabaseClient'; // Adjust the import according to your setup
+import { supabase } from '@/lib/supabase/supabaseClient'; // Adjust the import according to your setup
 
 // Define the shape of the state
 interface CompanyState {

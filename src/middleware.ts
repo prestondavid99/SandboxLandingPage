@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEnvVars } from './lib/env';
-import { createClient } from '@supabase/supabase-js';
-
-const { supabaseUrl, supabaseAnonKey } = getEnvVars();
-const supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+import { updateSession } from '@/lib/supabase/middleware'
+import { createClient } from './lib/supabase/supabaseServer';
 
 export async function middleware(req: NextRequest) {
-    const res = NextResponse.next();
+    let res = NextResponse.next();
+    res = await updateSession(req) || res;
 
+    const supabase = await createClient();
     const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
     // Check for errors or if session is null
@@ -18,22 +17,19 @@ export async function middleware(req: NextRequest) {
 
     // Access the token and check for user
     const token = session.access_token;
-    const user = session.user;
+    const user = await supabase.auth.getUser();
+    const user_id = user.data.user?.id;
 
     if (!user) {
         console.error('User not found in session');
         return res;
     }
 
-    console.log('Access Token:', token);
-    console.log('Session:', session);
-    console.log('User:', user);
-
     // Fetch company_id from user_company table
     const { data, error: companyError } = await supabase
         .from('user_company')
         .select('company_id')
-        .eq('user_id', user.id)
+        .eq('user_id', user_id)
         .single();
 
     if (companyError) {
@@ -42,7 +38,6 @@ export async function middleware(req: NextRequest) {
     }
 
     const company_id = data?.company_id?.toString();
-    const user_id = user.id.toString();
 
     if (token && company_id && user_id) {
         req.headers.set('company_id', company_id);
@@ -53,5 +48,8 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: '/api/:path*', // Apply middleware only to API routes
+    matcher: [
+        '/api/:path*',
+        // '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    ]
 };
