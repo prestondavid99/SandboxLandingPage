@@ -1,75 +1,71 @@
 import Head from 'next/head';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Session, User } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import PLink from '@/components/plaid/PLink';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
+import useCompanyExists from '@/lib/hooks/useCompanyExists';
+import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
+import { apiProviderKey } from '@/constants/config';
+import { createClient } from '@/lib/supabase/supabaseClient';
 
 export default function Profile() {
-    const session = useSession();
-    const supabase = useSupabaseClient();
+    const supabase = createClient();
 
-    const [companyExists, setCompanyExists] = useState(false);
-    const [companyName, setCompanyName] = useState('');
-    const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
-    const [companyId, setCompanyId] = useState('');
+    const [session, setSession] = useState<Session | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
-    const [qbExpiresAt, setQbExpiresAt] = useState<string | null>(null);
-    const currentDateTime = new Date();
+    useEffect(() => {
+        const fetchSessionAndUser = async () => {
+            const supabase = createClient();
 
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+            if (sessionError) {
+                console.error('Error fetching session:', sessionError.message);
+            } else {
+                setSession(session);
+            }
+
+            if (userError) {
+                console.error('Error fetching user:', userError.message);
+            } else {
+                setUser(user);
+            }
+        };
+
+        fetchSessionAndUser();
+        console.log('session:', session);
+        console.log('user:', user);
+    }, []);
+    
+    // Using the custom hook
+    const { companyExists, companyName, companyId } = useCompanyExists(session);
+    const { quickbooksCompanyId, qbExpiresAt } = useQuickBooksConnection(session, companyId);
+
+    const [newCompanyId, setNewCompanyId] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    useEffect(() => {
-        const checkCompany = async () => {
-            if (session) {
-                const { data, error } = await supabase
-                    .from('user_company')
-                    .select('company_id')
-                    .eq('user_id', session.user.id) // Make sure you have the correct user id field
-                    .single();
+    const [companyNameInput, setCompanyNameInput] = useState(companyName);
+    const [quickbooksCompanyIdInput, setQuickbooksCompanyIdInput] = useState(quickbooksCompanyId);
 
-                if (data) {
-                    setCompanyExists(true);
-                    const companyData = await supabase
-                        .from('company')
-                        .select('id, name, quickbooks_company_id, quickbooks_expires_at')
-                        .eq('id', data.company_id)
-                        .single();
+    const currentDateTime = new Date();
+    const tokenIsExpired = qbExpiresAt ? currentDateTime.getTime() >= new Date(qbExpiresAt).getTime() : true;
 
-                    if (companyData.data) {
-                        setCompanyName(companyData.data.name);
-                        setQuickbooksCompanyId(companyData.data.quickbooks_company_id);
-                        setCompanyId(companyData.data.id);
-                        setQbExpiresAt(companyData.data.quickbooks_expires_at);
-                    }
-                } else {
-                    setCompanyExists(false);
-                }
-            }
-        };
-        checkCompany();
-    }, [session, supabase]);
-
-    // check if the token is expired
-    // MUST occur after setting the qbExpiresAt variable! (done in the useEffect above)
-    let tokenIsExpired = true;
-    if (qbExpiresAt) {
-        const qbExpireDate = new Date(qbExpiresAt);
-        tokenIsExpired = currentDateTime.getTime() >= qbExpireDate.getTime();
-    }
     const handleCreateCompany = async () => {
-        if (!companyName || !quickbooksCompanyId) {
+        if (!companyNameInput || !quickbooksCompanyIdInput) {
             setOpenSnackbar(true);
             return;
         }
 
         const { data, error } = await supabase
             .from('company')
-            .insert([{ 
-                quickbooks_company_id: quickbooksCompanyId,
-                name: companyName
+            .insert([{
+                name: companyNameInput
             }])
             .select('id');
 
@@ -78,15 +74,18 @@ export default function Profile() {
             await supabase
                 .from('user_company')
                 .insert([{ user_id: session?.user.id, company_id: newCompanyId }]);
-            setCompanyExists(true);
-            setCompanyId(newCompanyId);
+                setNewCompanyId(newCompanyId);
+
+            await supabase
+                .from ('provider_company')
+                .insert([{ provider_id: apiProviderKey['quickbooks'], company_id: newCompanyId, provider_company_id: quickbooksCompanyIdInput }]);
         } else {
             console.error('Error creating company:', error);
         }
     };
 
     const handleUpdateCompany = async () => {
-        if (!companyId || !companyName || !quickbooksCompanyId) {
+        if (!companyId || !companyNameInput || !quickbooksCompanyIdInput) {
             setOpenSnackbar(true);
             return;
         }
@@ -94,14 +93,18 @@ export default function Profile() {
         const { data, error } = await supabase
             .from('company')
             .update({
-                name: companyName,
-                quickbooks_company_id: quickbooksCompanyId
+                name: companyNameInput
             })
             .eq('id', companyId)
             .select('id');
 
         if (data) {
-            console.log('Company updated successfully:', data);
+            await supabase
+                .from ('provider_company')
+                .update({ provider_company_id: quickbooksCompanyIdInput })
+                .eq('provider_id', apiProviderKey['quickbooks'])
+                .eq('company_id', companyId);
+
             setIsEditing(false); // Exit edit mode after update
         } else {
             console.error('Error updating company:', error);
@@ -114,9 +117,10 @@ export default function Profile() {
                 <title>Profile Information</title>
                 <meta name="description" content="View and edit your profile information" />
             </Head>
-            {session ? (
+            {user ? (
                 <>
-                    <h1>{session.user.user_metadata.full_name}'s Profile</h1>
+                    <h1>{user.email}'s Profile</h1>
+                    <PLink />
 
                     {companyExists ? (
                         <>
@@ -128,16 +132,16 @@ export default function Profile() {
                                         variant="outlined"
                                         fullWidth
                                         margin="normal"
-                                        value={companyName}
-                                        onChange={(e) => setCompanyName(e.target.value)}
+                                        defaultValue={companyName}
+                                        onChange={(e) => setCompanyNameInput(e.target.value)}
                                     />
                                     <TextField
                                         label="QuickBooks Company ID"
                                         variant="outlined"
                                         fullWidth
                                         margin="normal"
-                                        value={quickbooksCompanyId}
-                                        onChange={(e) => setQuickbooksCompanyId(e.target.value)}
+                                        defaultValue={quickbooksCompanyId}
+                                        onChange={(e) => setQuickbooksCompanyIdInput(e.target.value)}
                                     />
                                     <Button
                                         className='button button-contained'
@@ -169,22 +173,17 @@ export default function Profile() {
                             )}
                             <br/>
                             {!tokenIsExpired ? (
-                                <>
-                                    <p>Your QuickBooks is Connected</p>
-                                </>
+                                <p>Your QuickBooks is Connected</p>
                             ) : (
-                                <>
-                                    <Link href="/api/quickbooks/connect">
-                                        <Button
-                                            className='button button-contained'
-                                            variant="contained"
-                                        >
-                                            Connect Your QuickBooks
-                                        </Button>
-                                    </Link>
-                                </>
+                                <Link href="/api/quickbooks/connect">
+                                    <Button
+                                        className='button button-contained'
+                                        variant="contained"
+                                    >
+                                        Connect Your QuickBooks
+                                    </Button>
+                                </Link>
                             )}
-                            
                         </>
                     ) : (
                         <>
@@ -194,16 +193,16 @@ export default function Profile() {
                                 variant="outlined"
                                 fullWidth
                                 margin="normal"
-                                value={companyName}
-                                onChange={(e) => setCompanyName(e.target.value)}
+                                value={companyNameInput}
+                                onChange={(e) => setCompanyNameInput(e.target.value)}
                             />
                             <TextField
                                 label="QuickBooks Company ID"
                                 variant="outlined"
                                 fullWidth
                                 margin="normal"
-                                value={quickbooksCompanyId}
-                                onChange={(e) => setQuickbooksCompanyId(e.target.value)}
+                                value={quickbooksCompanyIdInput}
+                                onChange={(e) => setQuickbooksCompanyIdInput(e.target.value)}
                             />
                             <Button
                                 className='button button-contained'

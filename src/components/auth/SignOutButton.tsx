@@ -1,15 +1,11 @@
 "use client";
 
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-
 import Button from '@mui/material/Button';
-
+import { logout } from "./actions";
 
 function SignOutButton() {
-    const supabase = useSupabaseClient();
-
     async function handleLogout() {
-        await supabase.auth.signOut();
+        logout();
     }
 
     return (

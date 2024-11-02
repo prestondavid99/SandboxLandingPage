@@ -5,18 +5,14 @@ import Link from 'next/link';
 import Button from '@mui/material/Button';
 import React from 'react';
 import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksData';
-import { Row } from "@/types/types";
+import useCompanyExists from '@/lib/hooks/useCompanyExists';
+import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
 
 export default function Cashflow() {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [error, setError] = useState<string | null>(null);
     const today = new Date();
-
-    // company info
-    const [companyExists, setCompanyExists] = useState(false);
-    const [companyName, setCompanyName] = useState('');
-    const [quickbooksCompanyId, setQuickbooksCompanyId] = useState('');
 
     // quickbooks reports
     const [balanceSheetReport, setBalanceSheetReport] = useState<any | null>(null);
@@ -29,34 +25,8 @@ export default function Cashflow() {
     const [transactionData, setTransactionData] = useState<any | null>(null);
 
     // check if the user belongs to a company
-    useEffect(() => {
-        const checkCompany = async () => {
-            if (session) {
-                const { data, error } = await supabase
-                    .from('user_company')
-                    .select('company_id')
-                    .eq('user_id', session.user.id)
-                    .single();
-
-                if (data) {
-                    setCompanyExists(true);
-                    const companyData = await supabase
-                        .from('company')
-                        .select('name, quickbooks_company_id, id')
-                        .eq('id', data.company_id)
-                        .single();
-
-                    if (companyData.data) {
-                        setQuickbooksCompanyId(companyData.data.quickbooks_company_id);
-                        setCompanyName(companyData.data.name);
-                    }
-                } else {
-                    setCompanyExists(false);
-                }
-            }
-        };
-        checkCompany();
-    }, [session, supabase]);
+    const { companyExists, companyName, companyId } = useCompanyExists(session);
+    const { quickbooksCompanyId } = useQuickBooksConnection(session, companyId);
 
     // Fetch financial data when the company is found
     useEffect(() => {
