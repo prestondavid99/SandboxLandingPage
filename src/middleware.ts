@@ -40,8 +40,8 @@ export async function middleware(req: NextRequest) {
     const company_id = data?.company_id?.toString();
 
     if (token && company_id && user_id) {
-        req.headers.set('company_id', company_id);
-        req.headers.set('user_id', user_id);
+        res.headers.set('company_id', company_id);
+        res.headers.set('user_id', user_id);
     }
 
     return res;

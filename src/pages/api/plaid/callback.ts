@@ -22,7 +22,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             const access_token = response.data.access_token;
-            const company_id = Number(req.headers['company_id']);
+            const company_id = req.headers['company_id'] as string;
 
             // Insert new Access token
             const { data, error } = await supabase
@@ -35,12 +35,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                     provider_id: apiProviderKey['plaid'],
                 });
 
-            console.log('Insert Data:', data);
-            console.error('Insert Error:', error);
+            if (error) {
+                console.log('Insert Data:', data);
+                console.error('Insert Error:', error);
+            }
 
             // Return the access token to the client
             res.status(200).json({ access_token: response.data.access_token });
-            console.log("Access token:", response.data.access_token);
         } catch (error) {
             console.error("Error exchanging public token:", error);
             res.status(500).json({ message: "Error exchanging public token" });
