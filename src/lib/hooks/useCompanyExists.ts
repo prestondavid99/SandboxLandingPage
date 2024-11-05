@@ -11,10 +11,13 @@ const useCompanyExists = (session: any) => {
     useEffect(() => {
         const checkCompany = async () => {
             if (session) {
+                const user = await supabase.auth.getUser();
+                const userId = user.data.user?.id;
+
                 const { data, error } = await supabase
                     .from('user_company')
                     .select('company_id')
-                    .eq('user_id', session.user.id)
+                    .eq('user_id', userId)
                     .single();
 
                 if (error) {

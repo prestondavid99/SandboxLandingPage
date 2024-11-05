@@ -28,7 +28,7 @@ export default function Home() {
                             </p>
                         </div>
                         <div className='home-links'>
-                            <Link href="/signup">
+                            <Link href="/login">
                                 <Button className='button button-contained' variant="contained">Get Started</Button>
                             </Link>
                         </div>
@@ -117,7 +117,7 @@ export default function Home() {
                     <div className='free-plan-price'>$0/m</div>
                     Create and edit unlimited <br/>
                     proformas with AI
-                    <Link href="/signup">
+                    <Link href="/login">
                         <Button className='button button-contained' variant="contained">Get Started</Button>
                     </Link>
                 </div>

@@ -22,7 +22,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             const access_token = response.data.access_token;
-            const company_id = req.headers['company_id'] as string;
+            const companyId = req.headers['company_id'] as string;
+            const company_id = parseInt(companyId);
 
             // Insert new Access token
             const { data, error } = await supabase

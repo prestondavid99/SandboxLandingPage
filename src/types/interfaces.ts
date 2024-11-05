@@ -7,8 +7,8 @@
 
 export interface IPeriod {
     type: 'daily' | 'weekly' | 'quarterly' | 'yearly';
-    openingDate: Date;
-    closingDate: Date;
+    openingDate: string;
+    closingDate: string;
 }
 
 
@@ -34,4 +34,22 @@ export interface IAccountBalance {
     bankAccountNumber: string;              // Foreign key reference to the Bank Account table
     balance: number;                        // Balance of the account
     date: Date;                             // Date of the balance
+}
+
+
+// #############################
+// ####### API Interface #######
+// #############################
+
+export interface IApiToken {
+    id: number;
+    token: string;
+    type: 'Access' | 'Refresh';
+    providerId: number
+    expirationDatetime: Date | null;
+}
+
+export interface IApi {
+    id: number;
+    tokens: IApiToken[];
 }

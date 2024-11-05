@@ -3,10 +3,11 @@ import { IPeriod } from '@/types/interfaces';
 
 // Set up default period
 const today = new Date();
+const todayStr = today.toISOString();
 const defaultPeriod: IPeriod = {
     type: 'daily',
-    openingDate: today,
-    closingDate: today,
+    openingDate: todayStr,
+    closingDate: todayStr,
 };
 
 // define the shape of the state

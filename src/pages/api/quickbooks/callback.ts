@@ -28,7 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { access_token, refresh_token, expires_in } = response.token;
         const expire_datetime = new Date(Date.now() + expires_in * 1000);
 
-        const company_id = req.headers['company_id'] as string;
+        const companyId = req.headers['company_id'] as string;
+        const company_id = parseInt(companyId);
 
         // Check for existing Access token record
         const { data: existingAccessToken } = await supabase

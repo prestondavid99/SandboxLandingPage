@@ -9,38 +9,12 @@ import Snackbar from '@mui/material/Snackbar';
 import useCompanyExists from '@/lib/hooks/useCompanyExists';
 import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
 import { apiProviderKey } from '@/constants/config';
-import { createClient } from '@/lib/supabase/supabaseClient';
+import { supabase } from '@/lib/supabase/supabaseClient';
+import useUserSession from '@/lib/hooks/useUserSession';
 
 export default function Profile() {
-    const supabase = createClient();
 
-    const [session, setSession] = useState<Session | null>(null);
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-        const fetchSessionAndUser = async () => {
-            const supabase = createClient();
-
-            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-            const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-            if (sessionError) {
-                console.error('Error fetching session:', sessionError.message);
-            } else {
-                setSession(session);
-            }
-
-            if (userError) {
-                console.error('Error fetching user:', userError.message);
-            } else {
-                setUser(user);
-            }
-        };
-
-        fetchSessionAndUser();
-        console.log('session:', session);
-        console.log('user:', user);
-    }, []);
+    const { user, session } = useUserSession();
     
     // Using the custom hook
     const { companyExists, companyName, companyId } = useCompanyExists(session);
@@ -218,7 +192,7 @@ export default function Profile() {
                 <>
                     <h1>Profile</h1>
                     <p>Log in to view your profile</p>
-                    <Link href="/signup">
+                    <Link href="/login">
                         <Button className='button button-contained' variant="contained">Log in</Button>
                     </Link>
                 </>

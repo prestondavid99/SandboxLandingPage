@@ -1,16 +1,40 @@
 import Link from 'next/link';
 import Button from '@mui/material/Button';
-import { useSession } from '@supabase/auth-helpers-react';
+import { Session, User, useSession, useSessionContext } from '@supabase/auth-helpers-react';
 import SignOutButton from '../auth/SignOutButton';
+import { supabase } from '@/lib/supabase/supabaseClient';
+import { useEffect, useState } from 'react';
 
 const Navbar: React.FC = () => {
-    const session = useSession();
+    const [session, setSession] = useState<Session | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+    
+    useEffect(() => {
+        const fetchSessionAndUser = async () => {
+            const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+            if (sessionError) {
+                console.error('Error fetching session:', sessionError.message);
+            } else {
+                setSession(session);
+            }
+
+            if (userError) {
+                console.error('Error fetching user:', userError.message);
+            } else {
+                setUser(user);
+            }
+        };
+
+        fetchSessionAndUser();
+    }, []);
 
     return (
         <nav className="navbar">
             <Link className="logo-text" href="/">caster</Link>
             <ul>
-                {session ? (
+                {user ? (
                     <>
                         <li>
                             <Link href="/cashflow">
@@ -29,18 +53,17 @@ const Navbar: React.FC = () => {
                 ) : (
                     <>
                         <li>
-                            <Link href="/signup">
+                            <Link href="/login">
                                 Log In
                             </Link>
                         </li>
                         <li>
-                            <Link href="/signup">
+                            <Link href="/login">
                                 <Button className='button button-contained' variant="contained">Sign up</Button>
                             </Link>
                         </li>
                     </>
                 )}
-                        
             </ul>
         </nav>
     );

@@ -1,4 +1,3 @@
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -7,10 +6,11 @@ import React from 'react';
 import { findRowByHeader, parseTransactionData } from '@/lib/quickbooksData';
 import useCompanyExists from '@/lib/hooks/useCompanyExists';
 import useQuickBooksConnection from '@/lib/hooks/useQuickBooksConnection';
+import useUserSession from '@/lib/hooks/useUserSession';
+import { supabase } from '@/lib/supabase/supabaseClient';
 
 export default function Cashflow() {
-    const session = useSession();
-    const supabase = useSupabaseClient();
+    const { user, session } = useUserSession();
     const [error, setError] = useState<string | null>(null);
     const today = new Date();
 
@@ -50,6 +50,14 @@ export default function Cashflow() {
         fetchCashflowData();
     }, [companyExists, quickbooksCompanyId]);
 
+    useEffect(() => {
+        const fetchPlaidData = async () => {
+            const response = await fetch(`/api/plaid/endpoints?companyId=${companyId}`);
+            console.log('plaid response: ', response);
+        }
+        fetchPlaidData();
+    }, [companyId]);
+
     // extract the bank balance from the balance sheet report
     useEffect(() => {
         // ensure balanceSheetReport is not null
@@ -66,8 +74,6 @@ export default function Cashflow() {
         if (transactionList && transactionList != undefined) {
             const transactionData = parseTransactionData(transactionList!.Rows.Row);
             setTransactionData(transactionData);
-            console.log('transactionData');
-            console.log(transactionData);
         }
     }, [transactionList]);
 
@@ -140,7 +146,7 @@ export default function Cashflow() {
                 <>
                     <h1>Cashflow Dashboard</h1>
                     <p>Log in to view your profile</p>
-                    <Link href="/signup">
+                    <Link href="/login">
                         <Button className='button button-contained' variant="contained">Log in</Button>
                     </Link>
                 </>

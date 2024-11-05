@@ -6,28 +6,35 @@ import { getEnvVars } from '@/lib/env';
 
 const { baseUrl } = getEnvVars();
 
+const supabase = createClient();
+
 export async function login(provider: Provider) {
     try {
-        const supabase = await createClient();
-
-        const { error } = await supabase.auth.signInWithOAuth({
+        const { data, error } = await supabase.auth.signInWithOAuth({
             provider: provider,
             options: {
                 redirectTo: `${baseUrl}/profile`
             },
         });
         if (error) throw error;
+        return { success: true, data };
     } catch (error) {
-        console.error('error loggin in: ', error);
+        console.error('Error logging in: ', error);
+        return { success: false, error };
     }
 }
 
 export async function logout() {
     try {
-        const supabase = await createClient();
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
+        
+        // Optional: Redirect after logout
+        window.location.href = `${baseUrl}/login`;
+        
+        return { success: true };
     } catch (error) {
-        console.error('error loggin out: ', error);
+        console.error('Error logging out: ', error);
+        return { success: false, error };
     }
 }
