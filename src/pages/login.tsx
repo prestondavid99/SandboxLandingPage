@@ -1,7 +1,15 @@
 import Head from 'next/head';
 import OAuthLoginButton from '@/components/auth/OAuthLoginButton';
+import useUserSession from '@/lib/hooks/useUserSession';
 
 export default function LogIn() {
+    const { user, session } = useUserSession();
+
+    // if user is logged in, redirect to profile
+    if (user) {
+        window.location.href = '/profile';
+    }
+
     return (
         <>
             <Head>

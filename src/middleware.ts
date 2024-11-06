@@ -48,7 +48,6 @@ export async function middleware(request: NextRequest) {
         // define protected routes (user must be logged in to access)
         const isProtectedRoute = 
             request.nextUrl.pathname.startsWith('/profile') ||
-            request.nextUrl.pathname.startsWith('/dashboard') ||
             request.nextUrl.pathname.startsWith('/cashflow');
 
         if (!session && isProtectedRoute) {

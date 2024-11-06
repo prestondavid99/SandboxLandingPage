@@ -28,6 +28,8 @@ export default function Cashflow() {
     const { companyExists, companyName, companyId } = useCompanyExists(session);
     const { quickbooksCompanyId } = useQuickBooksConnection(session, companyId);
 
+    const [plaidData, setPlaidData] = useState<any | null>(null);
+
     // Fetch financial data when the company is found
     useEffect(() => {
         const fetchCashflowData = async () => {
@@ -50,10 +52,15 @@ export default function Cashflow() {
         fetchCashflowData();
     }, [companyExists, quickbooksCompanyId]);
 
+    // fetch plaid data
     useEffect(() => {
         const fetchPlaidData = async () => {
             const response = await fetch(`/api/plaid/endpoints?companyId=${companyId}`);
-            console.log('plaid response: ', response);
+            const data = await response.json();
+            setPlaidData(data);
+
+            console.log('Plaid data: ', data);
+
         }
         fetchPlaidData();
     }, [companyId]);
@@ -84,70 +91,16 @@ export default function Cashflow() {
                 <meta name="description" content="Your cashflow dashboard" />
             </Head>
 
-            {session ? (
+            {companyExists ? (
                 <>
-                    {companyExists ? (
-                        <>
-                            <h1>{companyName}'s Cashflow Dashboard</h1>
-                            {cashflowReport ? (
-                                <>
-                                    <h2>Cashflow Report</h2>
-                                    <p>{today.toDateString()}</p>
-
-                                    <h3>Income</h3>
-                                    <ul>
-                                    { transactionData ? (
-                                        transactionData[0][1].map((info: any) => {
-                                            return (
-                                                <li>{info[0]}: ${info[1]}</li>
-                                            );
-                                        })
-                                    ) : (
-                                        <></>
-                                    )}
-                                    </ul>
-
-                                    <h3>Expenses</h3>
-                                    <ul>
-                                    { transactionData ? (
-                                        transactionData[1][1].map((info: any) => {
-                                            return (
-                                                <li>{info[0]}: ${info[1]}</li>
-                                            );
-                                        })
-                                    ) : (
-                                        <></>
-                                    )}
-                                    </ul>
-
-                                    <h3>Cash Balance</h3>
-                                    <ul>
-                                        <li>Total Bank Balance: ${bankBalance}</li>
-                                    </ul>
-                                </>
-                            ) : error ? (
-                                <p>Error fetching cashflow data: {error}</p>
-                            ) : (
-                                <p>Loading cashflow data...</p>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <h1>Cashflow Dashboard</h1>
-                            <p>Link your QuickBooks account</p>
-                            <Link href="/profile">
-                                <Button className='button button-contained' variant="contained">Profile Settings</Button>
-                            </Link>
-                        </>
-                    )}
-                    
+                    <pre>{JSON.stringify(plaidData, null, 2)}</pre>
                 </>
-            ): (
+            ) : (
                 <>
                     <h1>Cashflow Dashboard</h1>
-                    <p>Log in to view your profile</p>
-                    <Link href="/login">
-                        <Button className='button button-contained' variant="contained">Log in</Button>
+                    <p>Create a company to get started</p>
+                    <Link href="/profile">
+                        <Button className='button button-contained' variant="contained">Profile Settings</Button>
                     </Link>
                 </>
             )}

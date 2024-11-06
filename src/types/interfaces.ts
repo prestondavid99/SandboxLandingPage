@@ -6,7 +6,7 @@
 // ##########################
 
 export interface IPeriod {
-    type: 'daily' | 'weekly' | 'quarterly' | 'yearly';
+    type: 'daily' | 'weekly' | 'quarterly' | 'yearly' | 'custom';
     openingDate: string;
     closingDate: string;
 }
@@ -23,6 +23,7 @@ export interface IBank {
 }
 
 export interface IBankAccount {
+    id: number;
     bankId: number;                         // Foreign key reference to the Bank table
     accountNumber: string;                  // Account number (stored as a string) serves as the identifier
     accountType: "checking" | "savings";    // Enum for account type

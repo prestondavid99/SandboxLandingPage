@@ -56,6 +56,7 @@ function categorizeTransactions(rows: Row[]) {
     const uncategorizedList: Row[] = [];
 
     try {
+        if (!rows) return { income: [], expense: [], uncategorized: [] };
         rows.forEach((row) => {
             const type = row.ColData![1].value.toLowerCase();
             const amount = parseFloat(row.ColData![8].value);
