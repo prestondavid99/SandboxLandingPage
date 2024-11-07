@@ -19,7 +19,6 @@ export interface IPeriod {
 export interface IBank {
     id: number;                             // ID of the bank
     name: string;                           // Name of the bank
-    accounts: IBankAccount[];               // list of bank accounts
 }
 
 export interface IBankAccount {
@@ -27,7 +26,6 @@ export interface IBankAccount {
     bankId: number;                         // Foreign key reference to the Bank table
     accountNumber: string;                  // Account number (stored as a string) serves as the identifier
     accountType: "checking" | "savings";    // Enum for account type
-    balances: IAccountBalance[];            // list of account balances
 }
 
 export interface IAccountBalance {

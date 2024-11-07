@@ -18,17 +18,15 @@ export async function getAccounts(companyId: string) {
             .eq('provider_id', apiProviderKey['plaid'])
             .eq('company_id', company_id)
             .single();
-
         if (error) {
             console.error('Error fetching accounts:', error);
             throw new Error('Failed to retrieve account data');
         }
-
         const plaid_access_token = data.token;
+        
         const request: AccountsGetRequest = {
             access_token: plaid_access_token,
         };
-        console.log('Request:', request);
         const response = await plaidClient.accountsGet(request);
         const accounts = response.data.accounts;
         console.log('Accounts:', accounts);
