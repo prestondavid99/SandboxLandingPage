@@ -3,12 +3,29 @@ import { apiProviderKey } from '@/constants/config';
 import { createClient } from '@/lib/supabase/supabaseServer';
 import { plaidClient } from '@/pages/api/plaid/plaidClient';
 import { AccountsGetRequest } from 'plaid';
+import { IAccountCashPosition } from '@/types/interfaces';
 
 export class PlaidBankAccountsClient {
     private accounts: any[] = [];
+    private accountCashPositions: IAccountCashPosition[] = [];
     private supabase = createClient();
 
     constructor() {}
+
+    private calculateTrend(openingBalance: number, closingBalance: number): number {
+        return (closingBalance - openingBalance) / openingBalance * 100;
+    }
+
+    // transform plaid account to IAccountCashPosition format
+    private transformPlaidAccount(account: any): IAccountCashPosition {
+        return {
+            bankName: account.official_name || account.name,    // TODO: add bank name 
+            accountNumber: account.mask,                        // Last 4 digits of account number
+            openingBalance: account.balances.current || 0,      // TODO: set opening balance based on period
+            closingBalance: account.balances.current || 0,      // assuming the period ends today
+            trend: this.calculateTrend(account.balances.available, account.balances.current)
+        };
+    }
 
     // query plaid for accounts
     async fetchAccounts() {
@@ -21,6 +38,11 @@ export class PlaidBankAccountsClient {
                 .select('company_id')
                 .eq('user_id', user_id)
                 .single();
+
+            if (companyError) {
+                console.error('Error fetching company:', companyError);
+                throw new Error('Failed to retrieve company data');
+            }
 
             const company_id = parseInt(companyId?.company_id);
             if (isNaN(company_id)) {
@@ -47,8 +69,10 @@ export class PlaidBankAccountsClient {
             };
 
             const response = await plaidClient.accountsGet(request);
-            this.accounts = response.data.accounts;
-            return this.accounts;
+            this.accountCashPositions = response.data.accounts.map(account => 
+                this.transformPlaidAccount(account)
+            );
+            return this.accountCashPositions;
         }
         catch (error) {
             console.error('Error fetching accounts:', error);
@@ -56,13 +80,8 @@ export class PlaidBankAccountsClient {
         }
     }
 
-    // get cached accounts
+    // get saved accounts
     getAccounts() {
-        return this.accounts;
+        return this.accountCashPositions;
     }
 }
-
-// Usage example:
-// const accountsManager = new AccountsManager();
-// await accountsManager.fetchAccounts();
-// const accounts = accountsManager.getAccounts();
