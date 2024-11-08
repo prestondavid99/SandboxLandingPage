@@ -6,6 +6,7 @@ import { AccountsGetRequest } from 'plaid';
 import { IAccountCashPosition } from '@/types/interfaces';
 
 export class PlaidBankAccountsClient {
+    private bankNames = ['Plaid', 'American Express', 'Bank of America', 'Chase', 'Mercury']; // TODO: Add all supported banks
     private accounts: any[] = [];
     private accountCashPositions: IAccountCashPosition[] = [];
     private supabase = createClient();
@@ -16,10 +17,17 @@ export class PlaidBankAccountsClient {
         return (closingBalance - openingBalance) / openingBalance * 100;
     }
 
+    private getBankNameFromAccount(accountName: string): string {
+        const matchedBank = this.bankNames.find(bank => 
+            accountName.toLowerCase().includes(bank.toLowerCase())
+        );
+        return matchedBank || accountName;
+    }
+
     // transform plaid account to IAccountCashPosition format
     private transformPlaidAccount(account: any): IAccountCashPosition {
         return {
-            bankName: account.official_name || account.name,    // TODO: add bank name 
+            bankName: this.getBankNameFromAccount(account.official_name || account.name),
             accountNumber: account.mask,                        // Last 4 digits of account number
             openingBalance: account.balances.current || 0,      // TODO: set opening balance based on period
             closingBalance: account.balances.current || 0,      // assuming the period ends today
@@ -69,9 +77,10 @@ export class PlaidBankAccountsClient {
             };
 
             const response = await plaidClient.accountsGet(request);
-            this.accountCashPositions = response.data.accounts.map(account => 
-                this.transformPlaidAccount(account)
-            );
+            this.accountCashPositions = response.data.accounts
+                .filter(account => account.type === 'depository')
+                .map(account => this.transformPlaidAccount(account));
+
             return this.accountCashPositions;
         }
         catch (error) {
