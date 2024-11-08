@@ -1,0 +1,15 @@
+.columnTitleContainer {
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.groupContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    align-self: stretch;
+}

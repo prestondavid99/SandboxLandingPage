@@ -1,0 +1,40 @@
+.menuItemContainer {
+    display: flex;
+    align-items: flex-start;
+}
+
+.menuItemContainer:hover {
+    user-focus-pointer: pointer;
+}
+
+.menuItemText {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.menuItemTextActive {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    color: var(--primary-color);
+}
+
+.underline {
+    height: 0.25rem;
+    align-self: stretch;
+
+    border-radius: 0.5625rem;
+    background: var(--primary-color);
+}
+
+.underlineInvisible {
+    height: 0.25rem;
+    align-self: stretch;
+    opacity: 0;
+}
+
+
+

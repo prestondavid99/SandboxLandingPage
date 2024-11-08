@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+    padding: 1.125rem 1.125rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3rem;
+    height: 30rem;
+    align-self: stretch;
+
+    border-radius: 0.5rem;
+    border: var(--CardStroke);
+}

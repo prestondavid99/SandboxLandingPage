@@ -1,0 +1,70 @@
+/* components/toggle-switch.module.css */
+.toggleWithTitleContainer {
+    display: flex;
+    padding: 0.2rem 0.62875rem 0.2rem 0;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    border-radius: 1.625rem;
+    border: var(--CardStroke);
+}
+
+.toggleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle {
+    display: flex;
+    padding: 0.25rem 2.5rem 0.25rem 0.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    border-radius: 5.25rem;
+    background: var(--background-color-3);
+    background-clip: padding-box;
+    height: 100%;
+    width: fit-content;
+    border-color: transparent;
+}
+
+.toggle:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+}
+
+.slider {
+    position: relative;
+    /*left: 1rem;*/
+    width: 1.575rem;
+    height: 1.575rem;
+    border-radius: 1.75rem;
+    background: var(--background-color-1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.active {
+    background: var(--ButtonLinearGradient);
+    background-clip: padding-box;
+}
+
+.active .slider {
+    transform: translateX(1.9rem);
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.label {
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    font-size: 1rem;
+    color: #4b5563;
+    pointer-events: none;
+    user-select: none;
+}

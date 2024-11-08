@@ -1,0 +1,44 @@
+.graphicalSummaryContainer {
+    display: flex;
+    height: 10.75rem;
+    padding: 0.625rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex: 1 0 0;
+
+
+    border-radius: 0.5rem;
+    border: var(--CardStroke);
+    background: var(--background-color-1);
+
+    /*border-color: red*/
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 50%;
+}
+
+.chartContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.innerChartContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.goodText {
+    color: var(--GoodColor);
+}
+
+.badText {
+    color: var(--accent-color-2);
+}

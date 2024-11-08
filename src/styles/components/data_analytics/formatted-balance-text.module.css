@@ -1,0 +1,31 @@
+.balanceTextContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.amountContainer {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dollarsText {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.centsText {
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.grayText {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    color: var(--secondary-title-color);
+}

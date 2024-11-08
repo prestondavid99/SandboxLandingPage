@@ -1,0 +1,11 @@
+.icon {
+    display: inline-block;
+}
+
+.iconPath {
+    color: var(--IconColor);
+}
+
+.lightIconPath {
+    color: var(--LightIconColor);
+}

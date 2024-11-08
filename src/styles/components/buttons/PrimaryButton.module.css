@@ -1,0 +1,17 @@
+.primaryButtonContainer {
+    display: flex;
+    padding: 0.6rem 1rem;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 0.5rem;
+    border: var(--ButtonLinearGradient);
+    background: var(--background-color-1);
+    background-clip: padding-box;
+    background: var(--ButtonLinearGradient);
+    color: var(--background-color-1)
+}
+
+.primaryButtonContainer:hover {
+    background: var(--background-color-3);
+    background-clip: padding-box;
+}

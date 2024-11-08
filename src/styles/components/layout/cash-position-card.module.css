@@ -1,0 +1,58 @@
+.cashPositionCardContainer {
+    display: flex;
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 0.5rem;
+    border: var(--CardStroke);
+}
+
+.leftContainer {
+
+}
+
+.rightContainer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.primaryTextStyle {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.lightTextStyle {
+    color: var(--secondary-title-color);
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.trendContainer {
+    padding: 1rem;
+    color: var(--GoodColor);
+    /*background-color: var(--);*/
+}
+
+.columnTitleContainer {
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.groupContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    align-self: stretch;
+}

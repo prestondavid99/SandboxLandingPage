@@ -10,7 +10,7 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { EnvProvider, useEnv } from '../components/wrappers/context/EnvContext';
 
-import '../styles/style.css';
+import '../styles/globals.css';
 import '../styles/pages/signup.css';
 import '../styles/components/auth/oauth-login-button.css'
 

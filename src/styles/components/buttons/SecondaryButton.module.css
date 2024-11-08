@@ -1,0 +1,11 @@
+.secondaryButtonContainer {
+    display: flex;
+    padding: 0.5rem;
+    align-items: center;
+    gap: 0.1rem;
+    border-radius: 0.5rem;
+    border: var(--CardStroke);
+    background: var(--background-color-1);
+    background-clip: padding-box;
+}
+
